@@ -12,7 +12,7 @@ from structured_outputs import PlannerOutput, PlannerAction
 from prompt_templates.planner import SYSTEM_PROMPT
 from tools.dataset_tools import get_dataset_structure, get_dataset_statistics
 from langchain.agents.middleware import ModelRequest,dynamic_prompt
-
+from langchain_core.prompts import PromptTemplate
 """
 agents/planner.py
 
@@ -42,25 +42,13 @@ PLANNER_TOOLS = [
     get_dataset_statistics,
 ]
 
-@dynamic_prompt
+# @dynamic_prompt
 def planner_prompt(request: ModelRequest) -> str:
     file_path = request.runtime.context.file_path
     dataset_description = request.runtime.context.dataset_description
     column_descriptions = request.runtime.context.column_descriptions
     business_rules = request.runtime.context.business_rules
     known_issues = request.runtime.context.known_issues
-
-    return (
-        f"{SYSTEM_PROMPT}\n\n"
-        f"## Dataset Context\n"
-        f"file_path: {file_path}\n"
-        f"description: {dataset_description}\n"
-        f"columns: {column_descriptions}\n"
-        f"business_rules: {business_rules}\n"
-        f"known_issues: {known_issues}\n\n"
-        f"When calling get_dataset_structure or get_dataset_statistics "
-        f"use this exact path: {file_path}"
-    )
 
 def run_planner(
     improved_question: str,
@@ -86,14 +74,22 @@ def run_planner(
     Returns:
         PlannerOutput with action == PLAN or action == CLARIFY
     """
-    agent = AIAgent(model="gpt-3.5-turbo")
+    system_prompt = SYSTEM_PROMPT.format(
+        file_path=context.file_path,
+        dataset_description=context.dataset_description,
+        column_descriptions=context.column_descriptions,
+        business_rules=context.business_rules,
+        known_issues=context.known_issues,
+    )
+    
+    agent = AIAgent(model="gpt-4o-mini") # gpt-3.5-turbo won't work here because it doesn't support tools + structured output simultaneously.
     agent.create_agent(
         model_name="planner",
-        system_prompt=SYSTEM_PROMPT,
+        system_prompt=system_prompt,
         response_format=PlannerOutput,
         context_schema=DatasetContext,
-        tools=PLANNER_TOOLS,
-        middleware=[planner_prompt],    # dynamic prompt reads context at runtime
+        tools=PLANNER_TOOLS
+        # middleware=[planner_prompt],    # dynamic prompt reads context at runtime
     )
 
     messages = [
@@ -106,7 +102,7 @@ def run_planner(
         context=context
     )
 
-    print(f"[DEBUG] keys: {list(raw.keys()) if isinstance(raw, dict) else type(raw)}")
+  
     return _parse(raw)
 
 

@@ -128,3 +128,26 @@
 2026-03-21 17:28:38,279 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-21 17:28:38,755 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-21 17:28:40,018 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:43:20,467 [INFO] Created agent with model gpt-3.5-turbo and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:43:21,498 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:43:22,312 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:43:23,441 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:43:25,285 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:45:47,324 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:45:49,976 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:45:52,084 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:47:47,403 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:47:50,914 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:47:52,649 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:07,810 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:48:09,340 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:15,569 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:15,578 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:48:17,122 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:24,588 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:24,606 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:48:25,623 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:32,222 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:32,234 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-21 17:48:33,404 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-21 17:48:39,092 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

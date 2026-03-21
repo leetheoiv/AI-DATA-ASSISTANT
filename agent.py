@@ -58,7 +58,7 @@ class AIAgent:
 
     """
 
-    def __init__(self, api_key: str | None = None, model: str = "gpt-3.5-turbo", timeout: int = 30,max_tokens=100):
+    def __init__(self, api_key: str | None = None, model: str = "gpt-4o-mini", timeout: int = 30,max_tokens=4000):
         load_dotenv("config/.env")
         import openai as _openai
 
@@ -110,7 +110,7 @@ class AIAgent:
         return "\n\n".join(parts)
         
         
-    def create_agent(self,model_name=None,tools: list=[],middleware=None,temperature=0.6,response_format=None, system_prompt: str | None = None,context_schema: str | None = None):
+    def create_agent(self,model_name=None,tools: list=[],middleware: list=[],temperature=0.6,response_format=None, system_prompt: str | None = None,context_schema: str | None = None):
         """
         Create a LangChain agent. Prefer explicit llm, then module-level self.llm, then api_key -> construct.
         Raises ValueError if no usable LLM is available.

@@ -39,12 +39,13 @@ def run_supervisor(
       SupervisorAction.CLARIFY → show result.clarifying_question to the user
       SupervisorAction.HANDOFF → pass result.improved_question to the planner
     """
-    agent = AIAgent(model="gpt-3.5-turbo")
+    agent = AIAgent(model="gpt-4o-mini")
     agent.create_agent(
         model_name="supervisor",
         system_prompt=SYSTEM_PROMPT,
         response_format=SupervisorOutput,
         context_schema=DatasetContext,
+        temperature=0.3 # low temperature for more deterministic output from the supervisor
     )
  
     messages = [
