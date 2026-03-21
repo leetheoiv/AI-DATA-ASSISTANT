@@ -9,13 +9,32 @@ import time
 import logging
 import langchain
 from langchain_openai import ChatOpenAI 
-
 from langchain.agents import create_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chat_models import init_chat_model
 from langgraph.checkpoint.memory import InMemorySaver
 from dotenv import load_dotenv
 from langchain.messages import SystemMessage, HumanMessage, AIMessage
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Open Log                                                                                                                                                                
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+logging.basicConfig(
+    filename=os.path.join(LOG_DIR, "agent.log"),
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)   
+
+logger = logging.getLogger(__name__)
+
+def write_log(message: str):
+    filepath = os.path.join(LOG_DIR, "agent.log")
+    with open(filepath, "a") as f:
+        f.write(f"{time.asctime()} {message}\n")
+    
+
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,11 +54,11 @@ load_dotenv()  # Load environment variables from .env file
 
 class AIAgent:
     """
-    LangChain-first AI agent wrapper. Prefer passing an explicit `llm` (langchain.OpenAI).
-    If none provided, the class will construct one from api_key or use module-level AI_client.
+    LangChain-first AI agent . Prefer passing an explicit `llm` (langchain.OpenAI).
+
     """
 
-    def __init__(self, api_key: str | None = None, model: str = "gpt-3.5-turbo", timeout: int = 30, tools: list=[]):
+    def __init__(self, api_key: str | None = None, model: str = "gpt-3.5-turbo", timeout: int = 30,max_tokens=100):
         load_dotenv("config/.env")
         import openai as _openai
 
@@ -53,14 +72,11 @@ class AIAgent:
         # set openai client key for REST fallback
         self._openai.api_key = self.key
 
-        # avoid mutable default
-        self.tools = list(tools) if tools is not None else []
-
         # model name and langchain llm resolution
         self.model = model
     
         try:
-            self.llm = ChatOpenAI(api_key=self.key, model_name=self.model, temperature=0.6,timeout=timeout,max_tokens=10,verbose=True)
+            self.llm = ChatOpenAI(api_key=self.key, model_name=self.model, temperature=0.6,timeout=timeout,max_tokens=max_tokens,verbose=True)
         except Exception:
             # keep None and let create_agent decide fallback
             self.llm = None
@@ -94,20 +110,22 @@ class AIAgent:
         return "\n\n".join(parts)
         
         
-    def create_agent(self,model_name=None,temperature=0.6,response_format=None, system_prompt: str | None = None,context_schema: str | None = None):
+    def create_agent(self,model_name=None,tools: list=[],middleware=None,temperature=0.6,response_format=None, system_prompt: str | None = None,context_schema: str | None = None):
         """
         Create a LangChain agent. Prefer explicit llm, then module-level self.llm, then api_key -> construct.
         Raises ValueError if no usable LLM is available.
         """
         self.agent = create_agent(
             model=self.llm,
-            tools=self.tools,
+            tools=tools,
             system_prompt=system_prompt,
             response_format=response_format,
             context_schema=context_schema,
             # checkpointer=InMemorySaver(),
-            name=model_name
+            name=model_name,
+            middleware=middleware
         )
+        logger.info(f"Created agent with model {self.model} and tools {[t.name for t in tools]}")
         return self.agent
     
     def chat(self,messages: list[dict] = []):
@@ -123,7 +141,7 @@ class AIAgent:
         response = self.agent.invoke({'messages': msgs})
         return response
         
-    def send(self, messages: list[dict] | None = None, response_format: str = "text", temperature: float = 0.0, max_tokens: int | None = None, use_langchain: bool | None = None):
+    def send(self ,messages: list[dict] | None = None, context=None,config=None) -> str:
         """
         Send a turn. Default behavior:
          - use the created LangChain agent if available (agent.invoke({'messages': msgs}))
@@ -131,13 +149,14 @@ class AIAgent:
          - else fall back to OpenAI REST client (self._openai.ChatCompletion)
         response_format: 'text'|'raw'|'full'|'json'
         """
+        
         msgs = messages if messages is not None else list(self.messages)
         if not isinstance(msgs, list):
             raise ValueError("messages must be a list of {'role','content'} dicts")
 
         # prefer explicit agent
         if self.agent is not None:
-            resp = self.agent.invoke({"messages": msgs})
+            resp = self.agent.invoke({"messages": msgs},context=context,config=config)
             
             return resp
             

@@ -27,7 +27,7 @@ def _load_dataframe(path_or_url: str) -> pd.DataFrame:
     # final attempt: let pandas try to infer
     return pd.read_csv(path_or_url)
 
-@tool(name="get_dataset_structure", description="Return dataset structure: name, rows, columns, dtypes, and shape for a CSV/JSON path or URL.")
+@tool("get_dataset_structure", description="Return dataset structure: name, rows, columns, dtypes, and shape for a CSV/JSON path or URL.")
 def get_dataset_structure(path: str) -> dict:
     """
     path: local path or http(s) URL to a CSV or JSON dataset.
@@ -53,7 +53,7 @@ def get_dataset_structure(path: str) -> dict:
         "shape": [int(rows), int(cols)],
     }
 
-@tool(name="get_dataset_statistics", description="Return statistics for numerical and categorical columns for a CSV/JSON path or URL.")
+@tool("get_dataset_statistics", description="Return statistics for numerical and categorical columns for a CSV/JSON path or URL.")
 def get_dataset_statistics(path: str, max_unique_values: int = 50) -> dict:
     """
     path: local path or http(s) URL to a CSV or JSON dataset.

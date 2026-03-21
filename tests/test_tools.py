@@ -1,7 +1,7 @@
 import json
 import pytest
 from pathlib import Path
-from tools import get_dataset_structure, get_dataset_statistics
+from tools.dataset_tools import get_dataset_structure, get_dataset_statistics
 
 CSV_CONTENT = """id,value,category
 1,10.5,A
