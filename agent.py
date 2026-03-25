@@ -8,13 +8,8 @@ import json
 import time 
 import logging
 import langchain
-from langchain_openai import ChatOpenAI 
-from langchain.agents import create_agent
-from langchain_core.prompts import ChatPromptTemplate
-from langchain.chat_models import init_chat_model
-from langgraph.checkpoint.memory import InMemorySaver
 from dotenv import load_dotenv
-from langchain.messages import SystemMessage, HumanMessage, AIMessage
+
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Open Log                                                                                                                                                                
@@ -54,16 +49,13 @@ load_dotenv()  # Load environment variables from .env file
 
 class AIAgent:
     """
-    LangChain-first AI agent . Prefer passing an explicit `llm` (langchain.OpenAI).
-
+        AIAgent is a class that interacts with the OpenAI API to generate responses based on prompts. It handles API key management, request configuration, and response parsing. 
+        The agent can be configured with different models, temperature settings, and other parameters to customize the behavior of the generated responses.
     """
 
     def __init__(self, api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
         load_dotenv("config/.env")
-        import openai as _openai
-
-
-        self._openai = _openai
+  
         self.timeout = timeout
         self.temperature = temperature
         self.key = api_key or os.getenv("OPENAI_API_KEY")
