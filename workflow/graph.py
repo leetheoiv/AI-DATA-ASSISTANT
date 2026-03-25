@@ -30,7 +30,9 @@ from structured_outputs import SupervisorAction, PlannerAction, PlannerOutput
 from agents.supervisor_agent import run_supervisor
 from agents.planner_agent import run_planner
 from agents.coder_agent import run_coder
+from agents.visualizer_agent import run_visualizer
 from structured_outputs.base import AgentType
+from tools.visualizer_tools import _LAST_PLOT_DATA
 # ─────────────────────────────────────────────────────────────────────────────
 #  Node functions
 # ─────────────────────────────────────────────────────────────────────────────
@@ -180,6 +182,9 @@ def executor_node(state: AgentState, context: DatasetContext) -> dict:
     Currently handles: coder
     Placeholder for: visualizer, stats, reporter
     """
+    # At the top of executor_node
+    _LAST_PLOT_DATA["image_base64"] = None
+    _LAST_PLOT_DATA["plotly_dict"] = None
     plan         = state.get("plan")
     current_step = state.get("current_step", 1)
     step_results = dict(state.get("step_results") or {})
@@ -195,56 +200,92 @@ def executor_node(state: AgentState, context: DatasetContext) -> dict:
           f"{step.title} [{step.agent.value}]")
  
     # ── Route to the correct specialist agent ────────────────────────────────
-    if step.agent == AgentType.CODER:
-        result = run_coder(
-            step=step,
-            context=context,
-            previous_step_results=step_results,
-        )
-        step_output = result.summary if result.success else f"[Error] {result.error}"
+    result = None 
+    
+    try:
+        if step.agent == AgentType.CODER:
+            result = run_coder(
+                step=step,
+                context=context,
+                previous_step_results=step_results,
+            )
+            step_output = result.summary if result.success else f"[Error] {result.error}"
+            step_results[current_step] = {
+                "summary":    result.summary,
+                "raw_result": result.raw_result,
+                "success":    result.success,
+                "error":      result.error,
+            }
+            status_msg = (
+                f"Step {current_step} ✓ {step.title}"
+                if result.success
+                else f"Step {current_step} ✗ {step.title}: {result.error}"
+            )
+    
+        elif step.agent == AgentType.VISUALIZER:
+            # --- EXECUTION ---
+            # This calls the agent. The agent uses the tool. 
+            # The tool populates _LAST_PLOT_DATA.
+            result = run_visualizer(step, context, step_results)
+            
+            # --- THE INJECTION STEP ---
+            # Now we manually 'marry' the LLM's summary with the local heavy data.
+            if result and result.success:
+                # We overwrite/augment the result object before it's saved to state
+                result.image_base64 = _LAST_PLOT_DATA["image_base64"]
+                result.raw_result = _LAST_PLOT_DATA["plotly_dict"]
+                
+                print(f"--- [DEBUG] Injected {len(result.image_base64 or '')} bytes into State ---")
+    
+        elif step.agent == AgentType.STATS:
+            # Placeholder — stats agent not built yet
+            step_results[current_step] = {
+                "summary": f"[Placeholder] Stats step: {step.title}",
+                "success": True,
+            }
+            status_msg = f"Step {current_step} [Placeholder] {step.title}"
+    
+        elif step.agent == AgentType.REPORTER:
+            # Placeholder — reporter agent not built yet
+            step_results[current_step] = {
+                "summary": f"[Placeholder] Reporter step: {step.title}",
+                "success": True,
+            }
+            status_msg = f"Step {current_step} [Placeholder] {step.title}"
+    
+        else:
+            step_results[current_step] = {
+                "summary": f"Unknown agent type: {step.agent}",
+                "success": False,
+            }
+            status_msg = f"Step {current_step} unknown agent: {step.agent}"
+    except Exception as e:
+        # 3. Catch the LengthFinishReasonError or any other crash
+        print(f"--- [ERROR] Agent crashed: {str(e)} ---")
+        # Create a "fake" failure result so the graph can continue or report the error
+        result = {
+            "step_id": state["current_step"],
+            "success": False,
+            "error": f"Agent failed: {str(e)}",
+            "summary": "Step failed due to timeout or model error."
+    }
+    # ── Process Result ──────────────────────────────────────────────────────
+    if result:
         step_results[current_step] = {
-            "summary":    result.summary,
-            "raw_result": result.raw_result,
-            "success":    result.success,
-            "error":      result.error,
+            "summary": getattr(result, "summary", ""),
+            "success": getattr(result, "success", False),
+            # These now contain the heavy data from our manual injection above
+            "image_base64": getattr(result, "image_base64", None),
+            "raw_result": getattr(result, "raw_result", None),
+            "error": getattr(result, "error", None)
         }
+        
         status_msg = (
             f"Step {current_step} ✓ {step.title}"
-            if result.success
-            else f"Step {current_step} ✗ {step.title}: {result.error}"
+            if result.success else f"Step {current_step} ✗ {step.title}: {result.error}"
         )
- 
-    elif step.agent == AgentType.VISUALIZER:
-        # Placeholder — visualizer agent not built yet
-        step_results[current_step] = {
-            "summary": f"[Placeholder] Visualizer step: {step.title}",
-            "success": True,
-        }
-        status_msg = f"Step {current_step} [Placeholder] {step.title}"
- 
-    elif step.agent == AgentType.STATS:
-        # Placeholder — stats agent not built yet
-        step_results[current_step] = {
-            "summary": f"[Placeholder] Stats step: {step.title}",
-            "success": True,
-        }
-        status_msg = f"Step {current_step} [Placeholder] {step.title}"
- 
-    elif step.agent == AgentType.REPORTER:
-        # Placeholder — reporter agent not built yet
-        step_results[current_step] = {
-            "summary": f"[Placeholder] Reporter step: {step.title}",
-            "success": True,
-        }
-        status_msg = f"Step {current_step} [Placeholder] {step.title}"
- 
     else:
-        step_results[current_step] = {
-            "summary": f"Unknown agent type: {step.agent}",
-            "success": False,
-        }
-        status_msg = f"Step {current_step} unknown agent: {step.agent}"
- 
+        status_msg = f"Step {current_step} - Agent {step.agent} not yet implemented."
     # ── Advance to next step ─────────────────────────────────────────────────
     next_step = current_step + 1
     is_last   = next_step > len(plan.steps)

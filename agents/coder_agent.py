@@ -30,7 +30,7 @@ from tools.dataset_tools import get_dataset_structure, get_dataset_statistics
 from langchain_core.prompts import PromptTemplate
 from tools.coder_tools import run_code, format_result, load_dataframe
 from prompt_templates.coder import CODER_PROMPT_TEMPLATE
-from structured_outputs.coder import CoderOutput
+from structured_outputs.coder_structured_output import CoderOutput
 
 
 

@@ -58,13 +58,14 @@ class AIAgent:
 
     """
 
-    def __init__(self, api_key: str | None = None, model: str = "gpt-4o-mini", timeout: int = 30,max_tokens=4000):
+    def __init__(self, api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
         load_dotenv("config/.env")
         import openai as _openai
 
 
         self._openai = _openai
         self.timeout = timeout
+        self.temperature = temperature
         self.key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.key:
             raise ValueError("OPENAI_API_KEY not set")
@@ -76,7 +77,7 @@ class AIAgent:
         self.model = model
     
         try:
-            self.llm = ChatOpenAI(api_key=self.key, model_name=self.model, temperature=0.6,timeout=timeout,max_tokens=max_tokens,verbose=True)
+            self.llm = ChatOpenAI(api_key=self.key, model_name=self.model, temperature=self.temperature,timeout=timeout,max_tokens=max_tokens,verbose=True,max_retries=max_retries)
         except Exception:
             # keep None and let create_agent decide fallback
             self.llm = None
@@ -157,6 +158,8 @@ class AIAgent:
         # prefer explicit agent
         if self.agent is not None:
             resp = self.agent.invoke({"messages": msgs},context=context,config=config)
+            # DEBUG: log the raw agent response
+            print(resp)
             
             return resp
             
