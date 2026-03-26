@@ -73,27 +73,42 @@ class AIAgent:
         self.client = OpenAI(api_key=self.key)
 
         
-    def ask_with_tools(self, user_prompt: str) -> str:
+    def ask(self, user_prompt: str,use_tools=False) -> str:
         """
             Generate a response from the agent based on user input.
 
             Args:
                 user_input (str): The input prompt from the user.
+                use_tools (bool): Whether to allow the agent to use tools for generating the response. If tools are used then structured response is not needed as tools already uses it in its response.
             Returns:
                 str: The generated response from the agent.
         """
         # Agent configuration
-        response = self.client.responses.create(
-            input=[{"role":"user","content":user_prompt}],
-            model=self.model,
-            instructions=self.system_prompt,
-            tools=self.tools,
-            temperature=self.temperature,
-            timeout=self.timeout,
-            max_output_tokens=self.max_tokens,
-            max_tool_calls=3,
-            previous_response_id=self.history[-1] if self.history else None
-        )
+        response = None
+        if use_tools == True:
+            response = self.client.responses.create(
+                input=[{"role":"user","content":user_prompt}],
+                model=self.model,
+                instructions=self.system_prompt,
+                tools=self.tools,
+                temperature=self.temperature,
+                timeout=self.timeout,
+                max_output_tokens=self.max_tokens,
+                max_tool_calls=3,
+                previous_response_id=self.history[-1] if self.history else None
+            )
+        else:
+            response = self.client.responses.parse(
+                input=[{"role":"user","content":user_prompt}],
+                model=self.model,
+                instructions=self.system_prompt,
+                temperature=self.temperature,
+                timeout=self.timeout,
+                max_output_tokens=self.max_tokens,
+                max_tool_calls=3,
+                text_format=self.response_format,
+                previous_response_id=self.history[-1] if self.history else None
+            )
 
         try:
             print(response)
