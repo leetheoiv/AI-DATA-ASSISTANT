@@ -1,2 +1,0 @@
-from prompt_templates.planner import SYSTEM_PROMPT as PLANNER_SYSTEM_PROMPT
-from prompt_templates.supervisor import SYSTEM_PROMPT as SUPERVISOR_SYSTEM_PROMPT

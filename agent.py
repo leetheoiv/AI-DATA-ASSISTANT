@@ -2,12 +2,11 @@
 # Import Libraries                                                                                                                                                                   
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 from dataclasses import dataclass
-import openai
+from openai import OpenAI
 import os
 import json
 import time 
 import logging
-import langchain
 from dotenv import load_dotenv
 
 
@@ -53,19 +52,65 @@ class AIAgent:
         The agent can be configured with different models, temperature settings, and other parameters to customize the behavior of the generated responses.
     """
 
-    def __init__(self, api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
+    def __init__(self, system_prompt=None,response_format=None, tools=None ,api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
         load_dotenv("config/.env")
-  
-        self.timeout = timeout
+
+        self.model=model
         self.temperature = temperature
+        self.timeout = timeout
+        self.max_tokens = max_tokens
+        self.max_retries = max_retries
+        self.system_prompt = system_prompt
+        self.tools = tools
+        self.response_format = response_format
+        self.history = []   
+
         self.key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.key:
             raise ValueError("OPENAI_API_KEY not set")
         
+        # Create OpenAI client with API Key
+        self.client = OpenAI(api_key=self.key)
+
         
+    def ask_with_tools(self, user_prompt: str) -> str:
+        """
+            Generate a response from the agent based on user input.
+
+            Args:
+                user_input (str): The input prompt from the user.
+            Returns:
+                str: The generated response from the agent.
+        """
+        # Agent configuration
+        response = self.client.responses.create(
+            input=[{"role":"user","content":user_prompt}],
+            model=self.model,
+            instructions=self.system_prompt,
+            tools=self.tools,
+            temperature=self.temperature,
+            timeout=self.timeout,
+            max_output_tokens=self.max_tokens,
+            max_tool_calls=3,
+            previous_response_id=self.history[-1] if self.history else None
+        )
+
+        try:
+            print(response)
+
+            if len(self.history) > 2:
+                self.history.pop(0) # Keep only the last 2 responses in history to manage context
+            self.history.apend(response.id)
+
+            return response
+        except Exception as e:
+            logger.error(f"Error generating response: {e}")
+            return "Sorry, I encountered an error while generating a response."
             
 
-    
-        
+agent = AIAgent()
+agent.ask("What is the capital of France?")
+print('-----------')
+print(agent.history)
     
     
