@@ -12,106 +12,261 @@ from langchain.tools import tool
 import seaborn as sns
 import base64
 from io import BytesIO
-
-
+import ast
+import os
+import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # non-interactive backend — no display required
+import matplotlib.pyplot as plt
+from langchain.tools import tool
+ 
+# Import optional charting libs — graceful fallback if not installed
+try:
+    import plotly.express as px
+    import plotly.graph_objs as go
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    PLOTLY_AVAILABLE = False
+ 
+try:
+    import seaborn as sns
+    SEABORN_AVAILABLE = True
+except ImportError:
+    SEABORN_AVAILABLE = False
+ 
+ 
 # ─────────────────────────────────────────────────────────────────────────────
-#  Shared execution scope — persists the DataFrame between tool calls
-#  within a single agent invocation
+#  Shared exec scope — same one used by coder_tools
+#  Import it so the DataFrame loaded by the coder is available here too
 # ─────────────────────────────────────────────────────────────────────────────
-
-_EXEC_STATE: dict = {
-    "df":        None,
-    "file_path": None,
-}
-
-
-def load_dataframe(file_path: str) -> pd.DataFrame:
-    """Load a CSV or Excel file into the shared exec scope."""
-    if file_path.endswith((".xlsx", ".xls")):
-        df = pd.read_excel(file_path)
-    else:
-        df = pd.read_csv(file_path)
-    _EXEC_STATE["df"] = df
-    _EXEC_STATE["file_path"] = file_path
-    return df
-
-
+ 
+from tools.coder_tools import _EXEC_STATE
+ 
+ 
 # ─────────────────────────────────────────────────────────────────────────────
-#  Tool: create_visualization
+#  Tool: create_chart
 # ─────────────────────────────────────────────────────────────────────────────
-_LAST_PLOT_DATA = {
-    "image_base64": None,
-    "plotly_dict": None
-}
+ 
 @tool("create_chart", description=(
-    "Use this tool to create a given chart. "
-    "You MUST provide chart_type, x_label, and y_label. Do not attempt to write code without calling this tool."
+    "Generate a chart from the coder's raw result and save it to disk. "
+    "Pass the coder's raw_result string, choose a chart_type "
+    "(bar, line, scatter, histogram, heatmap, box, pie, violin), "
+    "and provide axis labels and a title. "
+    "Returns the file path of the saved chart."
 ))
 def create_chart(
-    chart_type: str = None, 
-    x_label: str = None, 
-    y_label: str = None, 
-    title: str = "Visualization", 
-    caption: str = ""
+    coders_raw_result: str,
+    chart_type: str,
+    x_label: str,
+    y_label: str,
+    title: str,
+    caption: str = "",
 ) -> dict:
-    global _LAST_PLOT_DATA
-    print(f"--- [DEBUG] create_chart called: {chart_type} ---")
-    
+    """
+    Generate a chart from the coder's output and save it as a PNG.
+ 
+    Args:
+        coders_raw_result: The raw_result string from the coder step.
+                           Can be a dict, list, or DataFrame records string.
+        chart_type:        Chart type: bar, line, scatter, histogram,
+                           heatmap, box, pie, violin, kde.
+        x_label:           Column name or label for the x axis.
+        y_label:           Column name or label for the y axis.
+        title:             Chart title.
+        caption:           Optional caption / description of what the chart shows.
+ 
+    Returns:
+        {
+            "success":    bool,
+            "chart_path": path to saved PNG,
+            "chart_type": chart type used,
+            "title":      chart title,
+            "caption":    caption,
+            "error":      error message if failed
+        }
+    """
     df = _EXEC_STATE.get("df")
     if df is None:
-        return {"success": False, "error": "No dataset loaded."}
-
-    plt.close('all')
-    stdout_capture = StringIO()
-    raw = None
-
-    try:
-        # 1. Logic for generating 'raw' (px, sns, or plt)
-        if chart_type:
-            ct = chart_type.lower()
-            x = x_label.lower().replace(" ", "_") if x_label else None
-            y = y_label.lower().replace(" ", "_") if y_label else None
-            
-            if ct == "bar": raw = px.bar(df, x=x_label, y=y_label, title=title)
-            elif ct == "line": raw = px.line(df, x=x_label, y=y_label, title=title)
-            elif ct == "scatter": raw = px.scatter(df, x=x_label, y=y_label, title=title)
-            elif ct == "histogram": raw = px.histogram(df, x=x_label, title=title)
-            elif ct == "violin": raw = px.violin(df, x=x, y=y, title=title, box=True, points="all")
-            elif ct == "box": raw = px.box(df, x=x, y=y, title=title)
-            elif ct == "heatmap":
-                plt.figure(figsize=(10, 8))
-                sns.heatmap(df.select_dtypes(include=[np.number]).corr(), annot=True, cmap="vlag")
-                plt.title(title)
-                raw = plt.gcf()
-
-        if raw is None:
-            return {"success": False, "error": f"Unsupported chart type: {chart_type}"}
-
-        # 2. SEPARATE THE PAYLOAD
-        # Reset cache for new plot
-        _LAST_PLOT_DATA = {"image_base64": None, "plotly_dict": None}
-
-        if isinstance(raw, (go.Figure, dict)):
-            # Store Plotly data IN CACHE, not in the return dict
-            _LAST_PLOT_DATA["plotly_dict"] = raw.to_dict() if hasattr(raw, "to_dict") else dict(raw)
-            msg = "PLOTLY_CHART_READY"
-        else:
-            # Store Matplotlib Base64 IN CACHE
-            fig = raw.fig if hasattr(raw, "fig") else raw
-            buf = BytesIO()
-            fig.savefig(buf, format="png", bbox_inches="tight")
-            _LAST_PLOT_DATA["image_base64"] = base64.b64encode(buf.read()).decode("utf-8")
-            msg = "STATIC_IMAGE_READY"
-
-        # 3. RETURN MINI-RESPONSE TO LLM
-        # We tell the LLM the plot is ready, but we DON'T give it the bytes.
         return {
-            "success": True,
-            "result": f"Successfully generated {chart_type}. Metadata: {msg}",
-            "title": title,
-            "caption": caption,
-            "storage_status": "DATA_HELD_IN_CACHE" # Sentinel for our Python code
+            "success": False,
+            "error": "No dataset loaded. Ensure the coder step ran first.",
         }
+ 
+    # ── Parse coder's raw result ──────────────────────────────────────────────
+    chart_df = None
 
+ 
+    # ── Ensure output directory exists ───────────────────────────────────────
+    os.makedirs("charts", exist_ok=True)
+    safe_title = "".join(c if c.isalnum() or c in "_- " else "_" for c in title)
+    chart_path = f"charts/{safe_title.replace(' ', '_')}.png"
+ 
+    # ── Generate chart ───────────────────────────────────────────────────────
+    try:
+        ct = (chart_type or "bar").lower()
+        plt.close("all")
+ 
+        if ct == "bar":
+            _x = chart_df[x_label] if x_label in chart_df.columns else chart_df.iloc[:, 0]
+            _y = chart_df[y_label] if y_label in chart_df.columns else chart_df.iloc[:, 1]
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.bar(_x, _y)
+            ax.set_xlabel(x_label)
+            ax.set_ylabel(y_label)
+            ax.set_title(title)
+            plt.xticks(rotation=45, ha="right")
+            plt.tight_layout()
+ 
+        elif ct == "line":
+            _x = chart_df[x_label] if x_label in chart_df.columns else chart_df.iloc[:, 0]
+            _y = chart_df[y_label] if y_label in chart_df.columns else chart_df.iloc[:, 1]
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.plot(_x, _y, marker="o")
+            ax.set_xlabel(x_label)
+            ax.set_ylabel(y_label)
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "scatter":
+            _x = chart_df[x_label] if x_label in chart_df.columns else chart_df.iloc[:, 0]
+            _y = chart_df[y_label] if y_label in chart_df.columns else chart_df.iloc[:, 1]
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.scatter(_x, _y, alpha=0.6)
+            ax.set_xlabel(x_label)
+            ax.set_ylabel(y_label)
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "histogram":
+            _x = chart_df[x_label] if x_label in chart_df.columns else chart_df.iloc[:, 0]
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.hist(_x, bins=20, edgecolor="black")
+            ax.set_xlabel(x_label)
+            ax.set_ylabel("Frequency")
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "heatmap" and SEABORN_AVAILABLE:
+            corr = df.select_dtypes(include=[np.number]).corr()
+            fig, ax = plt.subplots(figsize=(10, 8))
+            sns.heatmap(corr, annot=True, cmap="vlag", ax=ax)
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "box":
+            _x = chart_df[x_label] if x_label in chart_df.columns else None
+            _y = chart_df[y_label] if y_label in chart_df.columns else chart_df.iloc[:, 0]
+            fig, ax = plt.subplots(figsize=(10, 6))
+            if _x is not None:
+                chart_df.boxplot(column=y_label, by=x_label, ax=ax)
+            else:
+                ax.boxplot(_y)
+            ax.set_title(title)
+            plt.suptitle("")
+            plt.tight_layout()
+ 
+        elif ct == "pie":
+            _labels = chart_df[x_label] if x_label in chart_df.columns else chart_df.iloc[:, 0]
+            _values = chart_df[y_label] if y_label in chart_df.columns else chart_df.iloc[:, 1]
+            fig, ax = plt.subplots(figsize=(8, 8))
+            ax.pie(_values, labels=_labels, autopct="%1.1f%%")
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "violin" and SEABORN_AVAILABLE:
+            fig, ax = plt.subplots(figsize=(10, 6))
+            sns.violinplot(
+                data=chart_df,
+                x=x_label if x_label in chart_df.columns else None,
+                y=y_label if y_label in chart_df.columns else chart_df.columns[0],
+                ax=ax,
+            )
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        elif ct == "kde" and SEABORN_AVAILABLE:
+            fig, ax = plt.subplots(figsize=(10, 6))
+            _col = x_label if x_label in chart_df.columns else chart_df.columns[0]
+            sns.kdeplot(data=chart_df, x=_col, fill=True, ax=ax)
+            ax.set_title(title)
+            plt.tight_layout()
+ 
+        else:
+            # Default fallback — bar chart
+            fig, ax = plt.subplots(figsize=(10, 6))
+            numeric_cols = chart_df.select_dtypes(include=[np.number]).columns
+            if len(numeric_cols) > 0:
+                chart_df[numeric_cols[0]].plot(kind="bar", ax=ax)
+                ax.set_title(title)
+            plt.tight_layout()
+ 
+        # ── Save to disk ──────────────────────────────────────────────────────
+        plt.savefig(chart_path, dpi=150, bbox_inches="tight")
+        plt.close("all")
+ 
+        return {
+            "success":    True,
+            "chart_path": chart_path,
+            "chart_type": ct,
+            "title":      title,
+            "caption":    caption,
+            "error":      None,
+        }
+ 
     except Exception:
-        return {"success": False, "error": traceback.format_exc()}
+        plt.close("all")
+        return {
+            "success": False,
+            "chart_path": None,
+            "error": traceback.format_exc(),
+        }
+ 
+ 
+# ─────────────────────────────────────────────────────────────────────────────
+#  Tool: format_chart_result
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+@tool("format_chart_result", description=(
+    "Produce a clean text description of the chart that was just created. "
+    "Call this after create_chart succeeds. Include what the chart shows, "
+    "the key insight, and any business rule interpretations."
+))
+def format_chart_result(
+    step_title: str,
+    chart_path: str,
+    chart_type: str,
+    title: str,
+    caption: str = "",
+    business_rule_notes: str = "",
+) -> dict:
+    """
+    Produce a clean description of the chart for the reporter.
+ 
+    Args:
+        step_title:          The analysis step title.
+        chart_path:          Path to the saved chart file.
+        chart_type:          Type of chart (bar, line, etc.)
+        title:               Chart title.
+        caption:             Caption describing what the chart shows.
+        business_rule_notes: Business rules relevant to interpretation.
+ 
+    Returns:
+        {"success": bool, "description": formatted text description}
+    """
+    try:
+        description = (
+            f"**{step_title}**\n\n"
+            f"Chart type: {chart_type}\n"
+            f"Title: {title}\n"
+            f"Saved to: {chart_path}\n"
+        )
+        if caption:
+            description += f"\n{caption}"
+        if business_rule_notes:
+            description += f"\n\n*Interpretation: {business_rule_notes}*"
+ 
+        return {"success": True, "description": description}
+ 
+    except Exception as e:
+        return {"success": False, "error": str(e)}

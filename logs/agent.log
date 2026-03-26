@@ -738,3 +738,398 @@
 2026-03-24 21:28:21,578 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-24 21:28:23,113 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-03-24 21:28:26,084 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:02:33,779 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:02:36,687 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:02:36,708 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:02:39,067 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:02:46,756 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:03:58,334 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:04:00,889 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:04:00,896 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:04:05,299 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:04:13,349 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:18,875 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:06:21,644 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:21,660 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:06:23,250 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:31,626 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:06:31,633 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:06:31,639 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:06:35,902 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:35,951 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart']
+2026-03-25 17:06:39,305 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:40,848 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:44,179 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:45,714 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:48,390 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:50,837 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:53,388 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:55,129 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:56,552 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:06:58,761 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:07:00,467 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:07:02,092 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:07:03,412 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:07:05,881 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:07:08,075 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:13:52,974 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:13:55,164 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:13:55,181 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:13:56,723 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:14:02,205 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:14:02,212 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:14:02,219 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:14:04,456 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:14:04,472 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:14:07,016 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:14:08,965 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:14:11,217 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:15:56,195 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:15:58,599 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:15:58,611 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:15:59,962 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:16:06,620 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,658 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:16:06,686 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:16:11,682 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:16:11,693 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:16:13,786 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:16:16,347 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:16:19,215 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:04,187 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:17:06,141 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:06,161 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:17:10,518 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:22,290 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:17:22,296 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:17:22,297 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,297 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,297 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:17:22,308 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:17:24,544 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:24,555 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:17:28,138 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:17:30,069 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:08,527 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:21:12,024 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:12,036 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:21:15,602 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:22,774 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,779 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:21:22,786 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:21:27,130 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:27,157 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:21:29,679 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:32,555 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:21:35,521 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:22:50,920 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:22:53,351 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:22:53,358 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:22:55,088 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:04,635 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,643 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,644 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:23:04,650 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:23:07,992 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:08,003 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:23:11,825 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:14,188 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:16,252 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:18,229 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:20,531 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:22,838 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:25,603 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:28,471 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:30,727 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:32,766 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:34,975 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:37,377 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:39,837 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:41,886 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:44,105 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:47,208 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:49,338 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:51,717 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:54,013 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:56,483 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:23:58,918 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:24:01,548 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:24:03,646 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:24:06,163 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:29:43,727 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:29:45,967 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:29:45,986 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:29:49,632 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:30:27,996 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:30:30,306 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:30:30,317 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:30:32,023 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:30:41,725 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:32:15,546 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:32:17,594 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:32:55,139 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:32:57,457 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:32:57,469 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:32:59,298 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:05,135 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,143 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:33:05,150 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:33:06,468 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:08,617 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:12,714 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:12,725 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:33:17,832 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:20,496 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:23,846 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:26,638 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:31,351 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:36,395 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:40,050 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:43,870 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:48,040 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:51,302 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:33:54,327 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:35:58,045 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:36:00,549 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:36:00,559 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:36:03,267 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:36:11,306 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:37:40,282 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:37:45,352 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:37:45,363 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:37:46,978 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:37:53,702 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,710 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:37:53,716 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:37:57,383 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:37:57,394 [INFO] Created agent with model gpt-4o-mini and tools ['create_chart', 'format_chart_result']
+2026-03-25 17:37:59,440 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:01,183 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:02,870 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:04,760 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:06,916 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:09,154 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:12,554 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:14,820 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:36,667 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:38:38,584 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:38,781 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:38:40,191 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:45,350 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,358 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:38:45,364 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:38:47,763 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:47,773 [INFO] Created agent with model gpt-4o-mini and tools ['format_chart_result']
+2026-03-25 17:38:50,429 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:54,526 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:56,645 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:38:59,211 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:01,184 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:03,432 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:05,742 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:07,881 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:09,782 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:11,802 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:39:13,979 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:41:43,912 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:41:46,661 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:41:46,676 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 17:41:48,445 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:42:00,638 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:42:00,650 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 17:42:00,658 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 17:42:04,697 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 17:42:04,706 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 17:42:07,242 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:05:01,990 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:05:04,601 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:05:04,622 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:05:05,673 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:05:11,972 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:05:11,978 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:05:11,978 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,978 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,979 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:05:11,985 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:05:16,942 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:05:16,952 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:05:25,875 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:06:58,300 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:07:01,369 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:07:01,384 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:07:03,386 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:07:10,862 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,865 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:07:10,870 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:07:16,812 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:07:16,820 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:07:23,015 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:22:47,551 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:22:50,155 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:22:50,177 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:22:51,797 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:23:01,201 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,204 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:23:01,211 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:23:03,989 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:23:03,999 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:23:10,496 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:29:00,375 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:29:02,253 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:29:02,275 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:29:03,326 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:29:08,435 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:29:08,444 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:29:08,444 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:29:08,444 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:29:08,444 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:29:08,444 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:29:08,445 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:29:08,445 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:29:08,457 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:29:11,367 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:29:11,374 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:29:16,971 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:32:50,460 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:32:52,557 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:32:52,581 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:32:54,462 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:33:01,719 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:33:01,729 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:33:01,737 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:33:04,946 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:33:04,954 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:33:11,989 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:38:58,029 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:39:00,489 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:39:00,509 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:39:02,346 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:39:09,807 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:39:09,813 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,814 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:39:09,819 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:39:12,164 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:39:12,173 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:39:17,646 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:42:37,036 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:42:39,545 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:42:39,601 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics']
+2026-03-25 18:42:41,066 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:42:45,979 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.planner_output.PlannerOutput from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.planner_output', 'PlannerOutput')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.PlannerAction from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'PlannerAction')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,987 [WARNING] Deserializing unregistered type structured_outputs.base.AgentType from checkpoint. This will be blocked in a future version. Add to allowed_msgpack_modules to silence: [('structured_outputs.base', 'AgentType')]
+2026-03-25 18:42:45,994 [INFO] Created agent with model gpt-4o-mini and tools ['get_dataset_structure', 'get_dataset_statistics', 'run_code', 'format_result']
+2026-03-25 18:42:47,308 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-25 18:42:47,315 [INFO] Created agent with model gpt-4o-mini and tools []
+2026-03-25 18:42:52,990 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

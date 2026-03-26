@@ -32,7 +32,7 @@ from agents.planner_agent import run_planner
 from agents.coder_agent import run_coder
 from agents.visualizer_agent import run_visualizer
 from structured_outputs.base import AgentType
-from tools.visualizer_tools import _LAST_PLOT_DATA
+
 # ─────────────────────────────────────────────────────────────────────────────
 #  Node functions
 # ─────────────────────────────────────────────────────────────────────────────
@@ -183,8 +183,7 @@ def executor_node(state: AgentState, context: DatasetContext) -> dict:
     Placeholder for: visualizer, stats, reporter
     """
     # At the top of executor_node
-    _LAST_PLOT_DATA["image_base64"] = None
-    _LAST_PLOT_DATA["plotly_dict"] = None
+   
     plan         = state.get("plan")
     current_step = state.get("current_step", 1)
     step_results = dict(state.get("step_results") or {})
@@ -224,18 +223,13 @@ def executor_node(state: AgentState, context: DatasetContext) -> dict:
     
         elif step.agent == AgentType.VISUALIZER:
             # --- EXECUTION ---
-            # This calls the agent. The agent uses the tool. 
-            # The tool populates _LAST_PLOT_DATA.
+            # This calls the agent. 
             result = run_visualizer(step, context, step_results)
+            
             
             # --- THE INJECTION STEP ---
             # Now we manually 'marry' the LLM's summary with the local heavy data.
-            if result and result.success:
-                # We overwrite/augment the result object before it's saved to state
-                result.image_base64 = _LAST_PLOT_DATA["image_base64"]
-                result.raw_result = _LAST_PLOT_DATA["plotly_dict"]
-                
-                print(f"--- [DEBUG] Injected {len(result.image_base64 or '')} bytes into State ---")
+
     
         elif step.agent == AgentType.STATS:
             # Placeholder — stats agent not built yet
@@ -271,21 +265,28 @@ def executor_node(state: AgentState, context: DatasetContext) -> dict:
     }
     # ── Process Result ──────────────────────────────────────────────────────
     if result:
-        step_results[current_step] = {
-            "summary": getattr(result, "summary", ""),
-            "success": getattr(result, "success", False),
-            # These now contain the heavy data from our manual injection above
-            "image_base64": getattr(result, "image_base64", None),
-            "raw_result": getattr(result, "raw_result", None),
-            "error": getattr(result, "error", None)
-        }
-        
-        status_msg = (
-            f"Step {current_step} ✓ {step.title}"
-            if result.success else f"Step {current_step} ✗ {step.title}: {result.error}"
-        )
-    else:
-        status_msg = f"Step {current_step} - Agent {step.agent} not yet implemented."
+            # Use this helper to prevent the 'dict' object has no attribute 'success' error
+            def get_v(obj, k, default=None):
+                return obj.get(k, default) if isinstance(obj, dict) else getattr(obj, k, default)
+
+            # Map everything into a standard format
+            res_success = get_v(result, "success", False)
+            res_summary = get_v(result, "chart_description") or get_v(result, "summary", "")
+            res_error   = get_v(result, "error")
+            res_path    = get_v(result, "chart_path")
+
+            step_results[current_step] = {
+                "summary":    res_summary,
+                "success":    res_success,
+                "raw_result": get_v(result, "raw_result"),
+                "chart_path": res_path,
+                "error":      res_error,
+            }
+            
+            status_msg = (
+                f"Step {current_step} ✓ {step.title}"
+                if res_success else f"Step {current_step} ✗ {step.title}: {res_error}"
+            )
     # ── Advance to next step ─────────────────────────────────────────────────
     next_step = current_step + 1
     is_last   = next_step > len(plan.steps)
