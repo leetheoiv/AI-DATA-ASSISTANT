@@ -42,11 +42,6 @@ load_dotenv()  # Load environment variables from .env file
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Agent Class                                                                                                                                                                
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# How to make a response: 
-#   response = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=5)
-#   response_text = response.choices[0].text.strip()
-#   print(response_text)
-
 class AIAgent:
     """
         AIAgent is a class that interacts with the OpenAI API to generate responses based on prompts. It handles API key management, request configuration, and response parsing. 
@@ -173,20 +168,3 @@ class AIAgent:
 
 
 
-# class CalendarEvent(BaseModel):
-#     name: str
-#     date: str
-#     participants: list[str]
-
-# client = AIAgent(response_format=CalendarEvent)
-# response,parsed_response = client.ask(
-#     user_prompt=
-
-#              "Alice and Bob are going to a science fair on Friday.",
- 
-#     use_structured_response=True
-# )
-
-# print("Raw Response:", response)
-# print("-----------------------------------")
-# print("Parsed Response:", parsed_response)
