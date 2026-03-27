@@ -64,7 +64,7 @@ class AIAgent:
         self.system_prompt = system_prompt
         self.tools = tools
         self.response_format = response_format
-        self.history = []  
+        self.history = [] 
         self.input_list = [] 
         self.tokens_used = 0
 
@@ -163,52 +163,30 @@ class AIAgent:
 
             self.history.append(response.id) # Add the response ID to history for context management in future calls
 
-            return response
+            paresed_response = response.output[0].content[0].parsed if response.output and response.output[0].content and response.output[0].content[0].parsed else None
+            return response,paresed_response
         except Exception as e:
             logger.error(f"Error generating response: {e}")
             print(f"[ERROR] in agent.py ask function: Error generating response: {e}")
             return f"[ERROR] in agent.py ask function: Error generating response: {e}"
         
-def get_weather(lat,long):
-    # Call weather API with lat and long and return the weather tool
-    response = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={long}&current_weather=true")
-    data = response.json()
-    return data['current_weather']
 
-tools = [
-    {
-        "type": "function",  # Added this required key
-        "name": "get_weather",
-        "description": "Get the current weather for a given location",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "lat": {
-                    "type": "number", 
-                    "description": "Latitude of the location"
-                },
-                "long": {
-                    "type": "number", 
-                    "description": "Longitude of the location"
-                }
-            },
-            "required": ["lat", "long"],
-            "additionalProperties": False
-        },
-        
-        "strict":True,
-        
-    }
-]
 
-tool_map = {
-    "get_weather": get_weather
-}
 
-class city(BaseModel):
-    city:str
-agent = AIAgent(tools=tools,response_format=city)
-response = agent.ask("what is the weather in miami",use_structured_response=True)
-print(response)
-print('-----------')
-print(response.output)
+# class CalendarEvent(BaseModel):
+#     name: str
+#     date: str
+#     participants: list[str]
+
+# client = AIAgent(response_format=CalendarEvent)
+# response,parsed_response = client.ask(
+#     user_prompt=
+
+#              "Alice and Bob are going to a science fair on Friday.",
+ 
+#     use_structured_response=True
+# )
+
+# print("Raw Response:", response)
+# print("-----------------------------------")
+# print("Parsed Response:", parsed_response)
