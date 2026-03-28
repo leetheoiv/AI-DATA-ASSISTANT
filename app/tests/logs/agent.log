@@ -1,0 +1,8 @@
+2026-03-27 18:25:35,817 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-27 18:25:35,894 [ERROR] Error generating response: 'ResponseOutputText' object has no attribute 'parsed'
+2026-03-27 18:32:17,296 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-27 18:32:17,393 [ERROR] Error generating response: 'ResponseOutputText' object has no attribute 'parsed'
+2026-03-27 18:35:02,488 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-27 18:47:54,356 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-27 18:48:10,669 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-27 18:49:06,339 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"

@@ -42,7 +42,4 @@ If the request is clear, provide a step-by-step plan for the sub-agents:
    - **Reporting Agent**: Summarize insights in plain language.
     
                                       
-
-
-
 """)

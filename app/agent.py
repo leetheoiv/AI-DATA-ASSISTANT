@@ -10,7 +10,7 @@ import logging
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import requests
-
+from app.settings import AGENT_API_KEY
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Open Log                                                                                                                                                                
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,6 @@ class AIAgent:
     """
 
     def __init__(self, system_prompt=None,response_format=None, tools=None ,api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
-        load_dotenv("config/.env")
 
         self.model=model
         self.temperature = temperature
@@ -63,14 +62,14 @@ class AIAgent:
         self.input_list = [] 
         self.tokens_used = 0
 
-        self.key = api_key or os.getenv("OPENAI_API_KEY")
-        if not self.key:
+
+        if not api_key:
             raise ValueError("OPENAI_API_KEY not set")
         
         # Create OpenAI client with API Key
-        self.client = OpenAI(api_key=self.key)
+        self.client = OpenAI(api_key=api_key)
 
-        
+    
     def ask(self, user_prompt: str,use_tools=False,tool_map=None,use_structured_response=False) -> str:
         """
             Generate a response from the agent based on user input.
@@ -86,12 +85,17 @@ class AIAgent:
                 str: The generated response from the agent.
         """
 
+        
+        #initialize response variables
+        raw = None
+        parsed_response = None
+        content = None
+
         # Agent configuration
-        response = None
         self.input_list.append({"role":"user","content":user_prompt})
         # Used if tools are enabled and use_structured_response is not enabled
         if use_tools == True and use_structured_response == False and tool_map is not None:
-            response = self.client.responses.create(
+            raw = self.client.responses.create(
                 input=self.input_list,
                 model=self.model,
                 instructions=self.system_prompt,
@@ -103,10 +107,13 @@ class AIAgent:
                 previous_response_id=self.history[-1] if self.history else None
             )
 
+            # get the ai plain text answer
+            content = raw.output.content.text
+
             # Add the models reasoning to the input list immediately so that it can be used in the next response if needed. This is important for tool calls as the model needs to know why it is calling the tool and what information it needs to get from the tool.
             has_tool_calls = False
             
-            for item in response.output:
+            for item in raw.output:
                 if item.type == "function_call":
                     tool_name = item.name
                     has_tool_calls = True
@@ -128,7 +135,7 @@ class AIAgent:
 
         # Used if structured response is enabled and tools are not enabled
         elif use_structured_response == True and use_tools == False:
-            response = self.client.responses.parse(
+            raw = self.client.responses.parse(
                 input=self.input_list,
                 model=self.model,
                 instructions=self.system_prompt,
@@ -139,8 +146,10 @@ class AIAgent:
                 text_format=self.response_format,
                 previous_response_id=self.history[-1] if self.history else None
             )
+            parsed_response = raw.output[0].content[0].parsed if raw.output and raw.output[0].content and raw.output[0].content[0].parsed else None
+            content = raw.output[0].content[0].text
         else:
-            response = self.client.responses.create(
+            raw = self.client.responses.create(
                 input=[{"role":"user","content":user_prompt}],
                 model=self.model,
                 instructions=self.system_prompt,
@@ -149,17 +158,18 @@ class AIAgent:
                 max_output_tokens=self.max_tokens,
                 previous_response_id=self.history[-1] if self.history else None
             )
+            content = raw.output[0].content[0].text
 
         try:
             
-            self.tokens_used += response.usage.total_tokens # add total tokens to agent for tracking
+            self.tokens_used += raw.usage.total_tokens # add total tokens to agent for tracking
             if len(self.history) > 1: 
                 self.history.pop(0) # Keep only the last responses in history to manage context
 
-            self.history.append(response.id) # Add the response ID to history for context management in future calls
+            self.history.append(raw.id) # Add the response ID to history for context management in future calls
 
-            paresed_response = response.output[0].content[0].parsed if response.output and response.output[0].content and response.output[0].content[0].parsed else None
-            return response,paresed_response
+            
+            return raw,parsed_response,content
         except Exception as e:
             logger.error(f"Error generating response: {e}")
             print(f"[ERROR] in agent.py ask function: Error generating response: {e}")

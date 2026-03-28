@@ -33,3 +33,14 @@
 #                                top_logprobs=0, truncation='disabled', usage=ResponseUsage(input_tokens=44, 
 #                                input_tokens_details=InputTokensDetails(cached_tokens=0), output_tokens=6, output_tokens_details=OutputTokensDetails(reasoning_tokens=0), total_tokens=50), 
 #                                user=None, billing={'payer': 'developer'}, frequency_penalty=0.0, presence_penalty=0.0, store=True)
+
+# (Response(id='resp_049fef44596568fa0069c72235885881938aad69dbd72b6d09', created_at=1774658101.0, error=None, 
+#           incomplete_details=None, instructions=None, metadata={}, model='gpt-4o-mini-2024-07-18', object='response', 
+#           output=[ResponseOutputMessage(id='msg_049fef44596568fa0069c722364f048193911c971978fa0623', content=[ResponseOutputText(annotations=[], text='The capital of France is Paris.', type='output_text', logprobs=[])], role='assistant', status='completed', type='message', phase=None)],
+#             parallel_tool_calls=True, temperature=0.6, tool_choice='auto', tools=[], top_p=1.0, background=False, 
+#             completed_at=1774658102.0, conversation=None, max_output_tokens=4000, max_tool_calls=None, previous_response_id=None, prompt=None, prompt_cache_key=None, prompt_cache_retention=None, 
+#             reasoning=Reasoning(effort=None, generate_summary=None, summary=None), safety_identifier=None, service_tier='default', status='completed', 
+#             text=ResponseTextConfig(format=ResponseFormatText(type='text'), verbosity='medium'), top_logprobs=0, truncation='disabled', 
+#             usage=ResponseUsage(input_tokens=14, input_tokens_details=InputTokensDetails(cached_tokens=0), output_tokens=8, output_tokens_details=OutputTokensDetails(reasoning_tokens=0), total_tokens=22), 
+#             user=None, billing={'payer': 'developer'}, frequency_penalty=0.0, presence_penalty=0.0, store=True),
+#  None)

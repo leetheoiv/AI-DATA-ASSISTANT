@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+ai_data_assistant.egg-info/PKG-INFO
+ai_data_assistant.egg-info/SOURCES.txt
+ai_data_assistant.egg-info/dependency_links.txt
+ai_data_assistant.egg-info/top_level.txt
+app/__init__.py
+app/agent.py
+app/examples.py
+app/agents/__init__.py
+app/prompt_templates/__init__.py
+app/prompt_templates/supervisor_prompt_template.py
+app/structured_outputs/__init__.py
+app/structured_outputs/context.py
+app/tests/__init__.py
+app/tools/dataset_tools.py
