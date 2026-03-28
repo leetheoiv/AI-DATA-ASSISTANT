@@ -67,7 +67,7 @@ class AIAgent:
             raise ValueError("OPENAI_API_KEY not set")
         
         # Create OpenAI client with API Key
-        self.client = OpenAI(api_key=api_key)
+        self.client = OpenAI(api_key=api_key,max_retries=3)
 
     
     def ask(self, user_prompt: str,use_tools=False,tool_map=None,use_structured_response=False) -> str:

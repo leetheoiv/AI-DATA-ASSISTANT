@@ -4,10 +4,9 @@ supervisor_prompt_template = Template("""
 {# supervisor_prompt.j2 #}
 You are an expert Data Science Supervisor. Your role is to bridge the gap between a user's business question and a technical execution plan.
 
+### DATASET CONTEXT:
 {{ dataset_context.to_prompt_block() }}
 
-## Current Request
-User Question: "{{ user_query }}"
 
 ## Your Instructions
 ### Step 1: Evaluation (Ambiguity Check)
