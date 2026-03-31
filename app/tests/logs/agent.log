@@ -6,3 +6,101 @@
 2026-03-27 18:47:54,356 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-03-27 18:48:10,669 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-03-27 18:49:06,339 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 18:54:38,882 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:14:11,999 [INFO] Initializing openai provider with model gpt-4-mini
+2026-03-30 19:14:12,015 [INFO] Client initialized
+2026-03-30 19:17:02,518 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:17:02,555 [INFO] Client initialized
+2026-03-30 19:21:14,117 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:21:14,167 [INFO] Client initialized
+2026-03-30 19:22:20,036 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:22:20,107 [INFO] Client initialized
+2026-03-30 19:23:32,434 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:23:32,475 [INFO] Client initialized
+2026-03-30 19:26:10,711 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:26:10,733 [INFO] Client initialized
+2026-03-30 19:30:25,533 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:31:10,610 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:31:27,087 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:32:58,870 [INFO] Initializing openai provider with model gpt-4-mini
+2026-03-30 19:32:58,908 [INFO] Client initialized
+2026-03-30 19:33:14,341 [INFO] Initializing openai provider with model gpt-4-mini
+2026-03-30 19:33:14,368 [INFO] Client initialized
+2026-03-30 19:33:14,744 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:33:15,436 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:33:15,579 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:34:32,387 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:34:32,427 [INFO] Client initialized
+2026-03-30 19:34:33,277 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:34:33,436 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:34:33,572 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:35:20,675 [INFO] Initializing openai provider with model gpt-4.1-mini
+2026-03-30 19:35:20,715 [INFO] Client initialized
+2026-03-30 19:35:21,103 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:35:21,256 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:35:21,816 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:39:16,663 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:39:16,702 [INFO] Client initialized
+2026-03-30 19:39:17,081 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:39:17,217 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:39:18,026 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 19:40:13,562 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:40:13,601 [INFO] Client initialized
+2026-03-30 19:40:14,706 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:40:51,560 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:40:51,597 [INFO] Client initialized
+2026-03-30 19:40:53,134 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:42:43,672 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:42:43,711 [INFO] Client initialized
+2026-03-30 19:42:45,196 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:42:45,278 [ERROR] Error generating response: 'City' object has no attribute 'usage'
+2026-03-30 19:44:28,186 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:44:28,227 [INFO] Client initialized
+2026-03-30 19:44:29,837 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:47:12,176 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:47:12,211 [INFO] Client initialized
+2026-03-30 19:50:01,646 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:50:01,686 [INFO] Client initialized
+2026-03-30 19:50:03,053 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:50:04,176 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:50:05,612 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:52:30,090 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:52:30,128 [INFO] Client initialized
+2026-03-30 19:52:31,843 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:54:23,777 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:54:23,798 [INFO] Client initialized
+2026-03-30 19:58:30,498 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:58:30,529 [INFO] Client initialized
+2026-03-30 19:58:32,288 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:59:05,461 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:59:05,494 [INFO] Client initialized
+2026-03-30 19:59:08,824 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 19:59:46,675 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 19:59:46,707 [INFO] Client initialized
+2026-03-30 19:59:49,866 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:00:34,113 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 20:00:34,137 [INFO] Client initialized
+2026-03-30 20:00:35,635 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:00:35,806 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:00:35,976 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:00:36,163 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:03:45,793 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 20:03:45,831 [INFO] Client initialized
+2026-03-30 20:03:47,824 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:05:34,500 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 20:05:34,538 [INFO] Client initialized
+2026-03-30 20:05:36,266 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:08:53,023 [INFO] Initializing openai provider with model gpt-4o-mini
+2026-03-30 20:08:53,052 [INFO] Client initialized
+2026-03-30 20:08:54,521 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:09:25,542 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:11:07,814 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:11:12,057 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:13:15,031 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:13:56,188 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 400 Bad Request"
+2026-03-30 20:16:41,674 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:17:23,712 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:17:55,419 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:17:59,322 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:18:24,278 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-30 20:18:28,889 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"

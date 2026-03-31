@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 import requests
 from app.settings import AGENT_API_KEY
+import instructor
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Open Log                                                                                                                                                                
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -48,7 +49,7 @@ class AIAgent:
         The agent can be configured with different models, temperature settings, and other parameters to customize the behavior of the generated responses.
     """
 
-    def __init__(self, system_prompt=None,response_format=None, tools=None ,api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
+    def __init__(self, system_prompt=None,tools=None ,api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
 
         self.model=model
         self.temperature = temperature
@@ -57,7 +58,6 @@ class AIAgent:
         self.max_retries = max_retries
         self.system_prompt = system_prompt
         self.tools = tools
-        self.response_format = response_format
         self.history = [] 
         self.input_list = [] 
         self.tokens_used = 0
@@ -68,9 +68,16 @@ class AIAgent:
         
         # Create OpenAI client with API Key
         self.client = OpenAI(api_key=api_key,max_retries=3)
+        # self.client = instructor.from_provider(
+        #     self.model, 
+        #     api_key=os.getenv("OPENAI_API_KEY"),
+        #     # 2. Use RESPONSES_TOOLS to bridge to .responses.create
+        #     mode=instructor.Mode.RESPONSES_TOOLS 
+        # )
+  
 
     
-    def ask(self, user_prompt: str,use_tools=False,tool_map=None,use_structured_response=False) -> str:
+    def ask(self, user_prompt: str,use_tools=False,tool_map=None,use_structured_response=False,response_model=None) -> str:
         """
             Generate a response from the agent based on user input.
 
@@ -134,20 +141,32 @@ class AIAgent:
                     })
 
         # Used if structured response is enabled and tools are not enabled
-        elif use_structured_response == True and use_tools == False:
+        elif response_model is not None and use_tools == False:
             raw = self.client.responses.parse(
                 input=self.input_list,
                 model=self.model,
                 instructions=self.system_prompt,
+                text_format=response_model,  # Pass the text format from the response model
                 temperature=self.temperature,
                 timeout=self.timeout,
                 max_output_tokens=self.max_tokens,
                 max_tool_calls=3,
-                text_format=self.response_format,
                 previous_response_id=self.history[-1] if self.history else None
             )
             parsed_response = raw.output[0].content[0].parsed if raw.output and raw.output[0].content and raw.output[0].content[0].parsed else None
             content = raw.output[0].content[0].text
+
+            # 3. CRITICAL: Add the AI's response back to history 
+            # This closes the 'Tool Call' loop so the next turn doesn't crash
+            # print(f"RAW OUTPUT: {raw.output}")
+            # self.input_list.append({
+            #     "role": "assistant",
+            #     "content": raw.output.content.text,
+            #     "tool_calls": raw.output.tool_calls # Keeps the 'Structured' context
+            # })
+
+            
+
         else:
             raw = self.client.responses.create(
                 input=[{"role":"user","content":user_prompt}],
