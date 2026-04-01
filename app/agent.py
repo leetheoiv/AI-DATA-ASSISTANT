@@ -12,6 +12,7 @@ from pydantic import BaseModel
 import requests
 from app.settings import AGENT_API_KEY
 import instructor
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Open Log                                                                                                                                                                
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -30,15 +31,10 @@ def write_log(message: str):
     with open(filepath, "a") as f:
         f.write(f"{time.asctime()} {message}\n")
     
-
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Load AI Key                                                                                                                                                                 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 load_dotenv()  # Load environment variables from .env file
-
-
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Agent Class                                                                                                                                                                
@@ -77,7 +73,7 @@ class AIAgent:
   
 
     
-    def ask(self, user_prompt: str,use_tools=False,tool_map=None,use_structured_response=False,response_model=None) -> str:
+    def ask(self, user_prompt: str,instructions=None,use_tools=False,tool_map=None,use_structured_response=False,response_model=None) -> str:
         """
             Generate a response from the agent based on user input.
 
