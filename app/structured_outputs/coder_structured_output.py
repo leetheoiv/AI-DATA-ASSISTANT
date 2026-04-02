@@ -7,11 +7,10 @@ from typing import List, Optional, Dict, Any
 # Coder Structured Output Schema
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-class CoderOutput(BaseModel):
+class CoderResponse(BaseModel):
     """
     CoderOutput defines the structured output format for the Coder agent. 
     """
-    model_config = ConfigDict(extra="forbid")
     
     thought_process: str = Field(
         ..., 
@@ -19,10 +18,10 @@ class CoderOutput(BaseModel):
     )
     
     #Flattening these out removes the need for a dynamic dictionary entirely
-    language: str = Field(
-        default=None,
-        description="The programming language used in the code snippet (e.g., Python, SQL)."
-    )
+    # language: str = Field(
+    #     default=None,
+    #     description="The programming language used in the code snippet (e.g., Python, SQL)."
+    # )
     
     
     executable_code: str= Field(
@@ -33,9 +32,4 @@ class CoderOutput(BaseModel):
     results_interpretation: str = Field(
         default=None,
         description="The results and interpretation from executing the code."
-    )
-
-    error: Optional[str] = Field(
-        default=None,
-        description="If the Coder Agent encountered any issues while generating the code, this field should contain a description of the error. If no errors were encountered, this field should be null."
     )

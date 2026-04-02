@@ -1,23 +1,26 @@
-
+#https://developers.openai.com/api/docs/guides/function-calling?strict-mode=enabled
 #-----------------------------------------------------------------------------------------------------------------#
-#   Create a Tool function                                                                                              #
+#   Create a Tool function                                                                                        #
 #-----------------------------------------------------------------------------------------------------------------#
 # Required Parameters:
-        # "parameters": {
-        #     "type": "object",
-        #     "properties": {
-        #         "lat": {
-        #             "type": "number", 
-        #             "description": "Latitude of the location"
-        #         },
-        #         "long": {
-        #             "type": "number", 
-        #             "description": "Longitude of the location"
-        #         }
-        #     },
-        #     "required": ["lat", "long"],
-        #     "additionalProperties": False
-        # },
+    ## 1. Define a list of callable tools for the model
+    # tools = [
+    #     {
+    #         "type": "function",
+    #         "name": "get_horoscope",
+    #         "description": "Get today's horoscope for an astrological sign.",
+    #         "parameters": {
+    #             "type": "object",
+    #             "properties": {
+    #                 "sign": {
+    #                     "type": "string",
+    #                     "description": "An astrological sign like Taurus or Aquarius",
+    #                 },
+    #             },
+    #             "required": ["sign"],
+    #         },
+    #     },
+    # ]
 
 def create_tool(name: str, description: str, parameters: dict = None, tool_type: str = "function", tools: list = None, strict: bool = True) -> dict:
     if tool_type == "group":
@@ -32,9 +35,9 @@ def create_tool(name: str, description: str, parameters: dict = None, tool_type:
         # Standard Function structure: Requires the nested 'function' key
         return {
             "type": "function",
+            "name": name,
+            "description": description,
             "function": {
-                "name": name,
-                "description": description,
                 "parameters": parameters,
                 "strict": strict
             }

@@ -5,82 +5,99 @@ import contextlib
 import traceback
 from app.prompt_templates.coder_prompt_template import coder_prompt_template
 from app.tools.execute_code import execute_code 
+from app.structured_outputs.coder_structured_output import CoderResponse    
 
 class Coder(AIAgent):
-    def __init__(self, max_retries, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.max_retries = max_retries
 
+    def run_task(self, current_task: str, dataset_context,dependencies: dict = None) -> tuple:
+        """
+        Execute a single analysis task with automatic retry on failure.
+        
+        Args:
+            task: The specific task description from the AnalysisPlan
+            context_data: Dataset context object with schema, file path, known issues
+            
+        Returns:
+            (parsed_response, output) on success
+            (None, error_message) on failure after max retries
+        """
+        self.reset()
 
-    def run_task(self, current_task: str, context_data: dict, **kwargs):
-        runtime_state = {} 
-
-        output = None
+        # Set system prompt after reset so it isn't wiped
         self.system_prompt = coder_prompt_template.render(
             current_task=current_task,
-            dataset_context=context_data 
+            dataset_context=dataset_context
         )
 
         current_prompt = current_task
 
-        for attempt in range(self.max_retries):
-            # 1. Get response (might contain chat + code)
-            raw, parsed_response, content = self.ask(
+        for attempt in range(1, self.max_retries + 1):
+            print(f"\n🔄 Attempt {attempt}/{self.max_retries}")
+
+            # Generate code
+            _, parsed_response, _ = self.ask(
                 user_prompt=current_prompt,
-                **kwargs
+                response_model=CoderResponse
             )
-            
-            executable_code = getattr(parsed_response, 'executable_code', None)
-         
-            
-   
-            
-            stdout_capture = io.StringIO()
-            try:
-                
-                # 2. Execution
-                execution_results = execute_code(executable_code)
-                
-                print(f"✅ Attempt {attempt + 1} succeeded. Code Output:\n{execution_results['output']}")
 
-                # Now we ask the agent to look at the REAL logs it just produced
-                interpretation_prompt = (
-                f"The code ran successfully. Here are the actual logs from the execution:\n\n"
-                f"{execution_results['output']}\n\n"
-                f"Based ONLY on these logs, provide a 1-sentence professional interpretation of the results."
-                )
+            if not parsed_response or not parsed_response.executable_code:
+                print("⚠️  No executable code returned — retrying.")
+                current_prompt = "You did not return executable code. Try again and ensure the 'executable_code' field is populated."
+                continue
 
-                # We call .ask() again, but this time we want a plain string or updated model
-                _, _, final_interpretation = self.ask(
-                    user_prompt=interpretation_prompt,
-                    use_structured_response=False # Get a clean sentence back
-                )
+            # Execute code
+            result = execute_code(parsed_response.executable_code)
 
-                # Update the parsed_response object with the REAL truth
-                if hasattr(parsed_response, 'results_interpretation'):
-                    parsed_response.results_interpretation = final_interpretation
-                 
+            if result["status"] == "error":
+                error_msg = result.get("message", "Unknown error")
+                stdout_before_crash = result.get("output", "")
+                print(f"❌ Attempt {attempt} failed:\n{error_msg.splitlines()[-1]}")
 
-                # If the code ran but produced NO output, the LLM won't know what happened.
-                if not output:
-                    output = "Code executed successfully, but produced no output. Did you forget to print() your results?"
-
-                # 4. Final Verification: Does the output actually answer the task?
-                # We return the output so the Supervisor/Interpreter can see it.
-                return raw, parsed_response, execution_results['output']
-
-            except Exception as e:
-                error_msg = traceback.format_exc()
-                print(f"❌ Attempt {attempt + 1} failed: {e}")
-                
-                # Feed the REAL error back to the LLM
-                # Feed the error back for the next iteration of the loop
+                # REFINED FEEDBACK FOR THE AGENT
+                # This becomes the 'user_prompt' for the NEXT iteration of the loop
                 current_prompt = (
-                    f"Your code failed. \nERROR:\n{error_msg.splitlines()[-1]}\n"
-                    f"STDOUT BEFORE CRASH:\n{stdout_capture.getvalue()}\n"
-                    "Fix the error and provide the updated code."
-            )
-  
+                    f"Your code failed on attempt {attempt}.\n\n"
+                    f"ERROR:\n{error_msg}\n\n"
+                    f"STDOUT BEFORE CRASH:\n{stdout_before_crash or 'None'}\n\n"
+                    "CRITICAL: Identify the root cause (check for unterminated strings or missing files), "
+                    "fix the logic, and return the corrected code block."
+                )
+                continue
 
-        return None, None, "Execution failed after maximum retries."
-        
+            # Success — get interpretation via a fresh isolated call
+            print(f"✅ Attempt {attempt} succeeded.")
+            output = result["output"]
+            parsed_response.results_interpretation = self._interpret(current_task, output)
+            print(f"""[Coder]\nHere are my results:\n{output}\n{parsed_response.results_interpretation} """)
+            return parsed_response, output
+
+        print(f"💀 Task failed after {self.max_retries} attempts.")
+        return None, f"Execution failed after {self.max_retries} attempts."
+
+    def _interpret(self, task: str, output: str) -> str:
+        """
+        Isolated one-shot call to interpret execution output.
+        Does not affect the coder's conversation history.
+        """
+        # Temporarily snapshot and clear state so this call is isolated
+        saved_input_list = self.input_list.copy()
+        saved_history = self.history
+
+        self.input_list = []
+        self.history = None
+
+        _, _, interpretation = self.ask(
+            user_prompt=(
+                f"Task: {task}\n\n"
+                f"Execution output:\n{output}\n\n"
+                "In one concise sentence, interpret what these results mean in business terms."
+            )
+        )
+
+        # Restore coder state so retry loop isn't disrupted
+        self.input_list = saved_input_list
+        self.history = saved_history
+
+        return interpretation or "No interpretation available."

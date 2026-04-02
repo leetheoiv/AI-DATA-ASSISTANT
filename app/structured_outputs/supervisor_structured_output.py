@@ -1,53 +1,23 @@
-from pydantic import BaseModel, Field,ConfigDict,model_validator
-from typing import List, Optional, Dict, Any
+from app.agent import AIAgent
+from app.prompt_templates.supervisor_prompt_template import supervisor_prompt_template
+from pydantic import BaseModel,Field
+from typing import Literal
 
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Supervisor Structured Output Schema
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class StepDetail(BaseModel):
-    """Defines the structure for an individual step."""
-    agent: str = Field(..., description="The agent assigned to this step.")
-    description: str = Field(..., description="Detailed description of what the agent needs to do.")
+class AnalysisTask(BaseModel):
+    agent: Literal["coder", "visualizer", "reporter"]
+    task_description: str
+    depends_on: list[int] = []  # indices of tasks that must complete first
 
-class SupervisorOutput(BaseModel):
-    """
-    SupervisorOutput defines the structured output format for the Supervisor agent. 
-    """
-    model_config = ConfigDict(extra="forbid")
-    
-    status: str = Field(
-        ..., 
-        description="Must be 'CLARIFICATION REQUIRED' or 'ANALYSIS PLAN'."
-    )
-    
-    #Flattening these out removes the need for a dynamic dictionary entirely
-    question: Optional[str] = Field(
-        default=None,
-        description="The question to ask. Required if status is 'CLARIFICATION REQUIRED'."
-    )
-    
-    # The dictionary keys will be your step identifiers (e.g., "Step 1", "Step 2")
-    steps: Optional[Dict[str, StepDetail]] = Field(
-        default=None,
-        description="The step-by-step analysis plan. Required if status is 'ANALYSIS PLAN'."
-    )
+class AnalysisPlan(BaseModel):
+    status: Literal["plan", "clarification"]
+    clarification_questions: list[str] = Field(...,description='Is populated with questions to the user to clarify the users inital question')      # populated when status == "clarification"
+    tasks: list[AnalysisTask] = []   # populated when status == "plan"
+    reasoning: str                   # supervisor's internal reasoning
 
-    @model_validator(mode="after")
-    def check_status_dependencies(self) -> "SupervisorOutput":
-        """
-        Enforces that 'steps' is present for an ANALYSIS PLAN 
-        and 'question' is present for CLARIFICATION REQUIRED.
-        """
-        if self.status == "ANALYSIS PLAN" and not self.steps:
-            raise ValueError(
-                "When status is 'ANALYSIS PLAN', the 'steps' field cannot be empty or None."
-            )
-            
-        if self.status == "CLARIFICATION REQUIRED" and not self.question:
-            raise ValueError(
-                "When status is 'CLARIFICATION REQUIRED', the 'question' field cannot be empty or None."
-            )
-            
-        return self
+# ── Supervisor ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ 

@@ -40,156 +40,138 @@ load_dotenv()  # Load environment variables from .env file
 # Agent Class                                                                                                                                                                
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class AIAgent:
-    """
-        AIAgent is a class that interacts with the OpenAI API to generate responses based on prompts. It handles API key management, request configuration, and response parsing. 
-        The agent can be configured with different models, temperature settings, and other parameters to customize the behavior of the generated responses.
-    """
+    """"
+    AIAgent is a general-purpose wrapper around the OpenAI API, designed to manage conversation state and support various interaction patterns:
+  - Plain text responses
+  - Structured outputs via Pydantic models
+  - Tool use with function calls and result integration"""
+    def __init__(
+        self,
+        api_key: str,
+        model: str = "gpt-4o-mini",
+        system_prompt: str = None,
+        tools: list = None,
+        temperature: float = 0.6,
+        timeout: int = 30,
+        max_tokens: int = 4000,
+        max_retries: int = 3,
+    ):
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY not set")
 
-    def __init__(self, system_prompt=None,tools=None ,api_key: str | None = None, model: str = "gpt-4o-mini", temperature=0.6,timeout: int = 30,max_tokens=4000,max_retries=3):
-
-        self.model=model
+        self.model = model
+        self.system_prompt = system_prompt
+        self.tools = tools
         self.temperature = temperature
         self.timeout = timeout
         self.max_tokens = max_tokens
         self.max_retries = max_retries
-        self.system_prompt = system_prompt
-        self.tools = tools
-        self.history = [] 
-        self.input_list = [] 
+
+        # Conversation state
+        self.input_list = []
+        self.history = None       # previous_response_id (string or None)
         self.tokens_used = 0
 
+        self.client = OpenAI(api_key=api_key, max_retries=max_retries)
 
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY not set")
-        
-        # Create OpenAI client with API Key
-        self.client = OpenAI(api_key=api_key,max_retries=3)
-        # self.client = instructor.from_provider(
-        #     self.model, 
-        #     api_key=os.getenv("OPENAI_API_KEY"),
-        #     # 2. Use RESPONSES_TOOLS to bridge to .responses.create
-        #     mode=instructor.Mode.RESPONSES_TOOLS 
-        # )
-  
+    def reset(self):
+        """Clear conversation state between sessions."""
+        self.input_list = []
+        self.history = None
 
-    
-    def ask(self, user_prompt: str,instructions=None,use_tools=False,tool_map=None,use_structured_response=False,response_model=None) -> str:
+    def _append_user(self, user_prompt: str):
+        if user_prompt is not None:
+            self.input_list.append({"role": "user", "content": user_prompt})
+
+    def _base_params(self) -> dict:
+        """Shared params across all API calls."""
+        return dict(
+            model=self.model,
+            instructions=self.system_prompt,
+            temperature=self.temperature,
+            max_output_tokens=self.max_tokens,
+            previous_response_id=self.history,
+        )
+
+    def _finalize(self, raw) -> None:
+        """Track tokens and update history after every call."""
+        self.tokens_used += raw.usage.total_tokens
+        self.history = raw.id
+
+    def ask(self, user_prompt: str = None, response_model=None, tool_map: dict = None) -> tuple:
         """
-            Generate a response from the agent based on user input.
-
-            Args:
-                user_input (str): The input prompt from the user.
-                use_tools (bool): Whether to allow the agent to use tools for generating the response. If tools are used then structured response is not needed as tools already uses it in its response.
-                use_structured_response (bool): Whether to format the response in a structured way (e.g., JSON). This is useful for easier parsing of the response.
-
-            use_tools and use_structured_response cannot be true at the same time as tools already uses structured response in its response.
-
-            Returns:
-                str: The generated response from the agent.
+        Single entry point for all call types:
+          - Plain text:            ask(user_prompt="...")
+          - Structured output:     ask(user_prompt="...", response_model=MyModel)
+          - Tool use:              ask(user_prompt="...", tool_map={"fn_name": fn})
         """
+        self._append_user(user_prompt)
 
-        
-        #initialize response variables
-        raw = None
-        parsed_response = None
-        content = None
+        raw = parsed = content = None # Initialize all to None for consistent return type, even if some calls don't populate them
 
-        # Agent configuration
-        self.input_list.append({"role":"user","content":user_prompt})
-        # Used if tools are enabled and use_structured_response is not enabled
-        if use_tools == True and use_structured_response == False and tool_map is not None:
-            raw = self.client.responses.create(
-                input=self.input_list,
-                model=self.model,
-                instructions=self.system_prompt,
-                tools=self.tools,
-                temperature=self.temperature,
-                timeout=self.timeout,
-                max_output_tokens=self.max_tokens,
-                max_tool_calls=3,
-                previous_response_id=self.history[-1] if self.history else None
-            )
-
-            # get the ai plain text answer
-            content = raw.output.content.text
-
-            # Add the models reasoning to the input list immediately so that it can be used in the next response if needed. This is important for tool calls as the model needs to know why it is calling the tool and what information it needs to get from the tool.
-            has_tool_calls = False
-            
-            for item in raw.output:
-                if item.type == "function_call":
-                    tool_name = item.name
-                    has_tool_calls = True
-                    # Execute your actual python function
-                    args_dict = json.loads(item.arguments)
-                    # Look up the function and unpack the dictionary as keyword arguments
-                    if tool_name in tool_map:
-                        # The ** unpacking handles whatever keys are inside args_dict
-                        result = tool_map[tool_name](**args_dict) 
-                    else:
-                        result = f"Error: Tool {tool_name} not found."
-
-                    # 5. Append the specific 'function_call_output' type
-                    self.input_list.append({
-                        "type": "function_call_output",
-                        "call_id": item.call_id,
-                        "output": str(result),
-                    })
-
-        # Used if structured response is enabled and tools are not enabled
-        elif response_model is not None and use_tools == False:
-            raw = self.client.responses.parse(
-                input=self.input_list,
-                model=self.model,
-                instructions=self.system_prompt,
-                text_format=response_model,  # Pass the text format from the response model
-                temperature=self.temperature,
-                timeout=self.timeout,
-                max_output_tokens=self.max_tokens,
-                max_tool_calls=3,
-                previous_response_id=self.history[-1] if self.history else None
-            )
-            parsed_response = raw.output[0].content[0].parsed if raw.output and raw.output[0].content and raw.output[0].content[0].parsed else None
-            content = raw.output[0].content[0].text
-
-            # 3. CRITICAL: Add the AI's response back to history 
-            # This closes the 'Tool Call' loop so the next turn doesn't crash
-            # print(f"RAW OUTPUT: {raw.output}")
-            # self.input_list.append({
-            #     "role": "assistant",
-            #     "content": raw.output.content.text,
-            #     "tool_calls": raw.output.tool_calls # Keeps the 'Structured' context
-            # })
-
-            
-
+        if tool_map:
+            raw, content = self._ask_with_tools(tool_map)
+        elif response_model:
+            raw, parsed, content = self._ask_structured(response_model)
         else:
-            raw = self.client.responses.create(
-                input=[{"role":"user","content":user_prompt}],
-                model=self.model,
-                instructions=self.system_prompt,
-                temperature=self.temperature,
-                timeout=self.timeout,
-                max_output_tokens=self.max_tokens,
-                previous_response_id=self.history[-1] if self.history else None
-            )
-            content = raw.output[0].content[0].text
+            raw, content = self._ask_plain()
 
-        try:
-            
-            self.tokens_used += raw.usage.total_tokens # add total tokens to agent for tracking
-            if len(self.history) > 1: 
-                self.history.pop(0) # Keep only the last responses in history to manage context
+        self._finalize(raw)
+        return raw, parsed, content
 
-            self.history.append(raw.id) # Add the response ID to history for context management in future calls
+    # ── Private call handlers ─────────────────────────────────────────────────
 
-            
-            return raw,parsed_response,content
-        except Exception as e:
-            logger.error(f"Error generating response: {e}")
-            print(f"[ERROR] in agent.py ask function: Error generating response: {e}")
-            return f"[ERROR] in agent.py ask function: Error generating response: {e}"
-        
+    def _ask_plain(self) -> tuple:
+        """Plain text response without parsing or tools."""
+        raw = self.client.responses.create(
+            input=self.input_list,
+            timeout=self.timeout,
+            **self._base_params()
+        )
+        return raw, raw.output[0].content[0].text
+
+    def _ask_structured(self, response_model) -> tuple:
+        """Parse response into structured format using provided Pydantic model."""
+        raw = self.client.responses.parse(
+            input=self.input_list,
+            text_format=response_model,
+            timeout=self.timeout,
+            **self._base_params()
+        )
+        parsed = raw.output[0].content[0].parsed if raw.output else None
+        content = raw.output[0].content[0].text if raw.output else None
+        return raw, parsed, content
+
+    def _ask_with_tools(self, tool_map: dict) -> tuple:
+        """Handle tool calls in a loop until the model produces a final answer."""
+        params = self._base_params()
+
+        raw = self.client.responses.create(
+            input=self.input_list,
+            tools=self.tools,
+            max_tool_calls=3,
+            **params
+        )
+
+        # Append model's tool call turn, execute tools, append results
+        self.input_list += raw.output
+        for item in raw.output:
+            if item.type == "function_call":
+                args = json.loads(item.arguments)
+                result = tool_map.get(item.name, lambda **k: f"Tool {item.name} not found")(**args)
+                self.input_list.append({
+                    "type": "function_call_output",
+                    "call_id": item.call_id,
+                    "output": str(result),
+                })
+
+        # Second call — model writes final answer with tool results in context
+        raw = self.client.responses.create(
+            input=self.input_list,
+            tools=self.tools,
+            **params
+        )
+        return raw, raw.output_text
 
 
 
