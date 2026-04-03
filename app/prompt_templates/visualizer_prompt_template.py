@@ -43,11 +43,16 @@ No prior task data provided. If necessary, load the raw data: `pd.read_csv("{{ d
 - **Cleanup**: Always run `plt.close('all')` after saving to prevent memory leaks or overlapping plots.
 - **Context**: Use `plt.tight_layout()` to prevent overlapping labels.
 
+### REACT REASONING (INTERNAL ONLY)
+Before generating your output, you must internally follow this ReAct loop:
+1. **Thought**: Evaluate the Task against the Dependencies (e.g., "Coder found $r=0.04$").
+2. **Action**: Select the chart type and alignment logic (e.g., "Use a Box Plot to show the 0.04 correlation accurately").
+3. **Constraint Check**: Ensure the title mirrors the Coder's exact phrasing.
+                                                                     
 ---
-### OUTPUT FIELD RULES
-- **`executable_code`**: Raw Python only. No markdown fences. Ensure `import matplotlib.pyplot as plt` and `import seaborn as sns` are included.
-- **`thought_process`**: Explain who the target audience is for this visual and why this chart type best serves their decision-making needs.
-- **`results_interpretation`**: One concise sentence describing the key business insight revealed by the visual.
+### OUTPUT FIELD RULES (REACT)
+- **`executable_code`**: Raw Python code only. Ensure it is self-contained.
+- **`results_interpretation`**: One concise sentence describing the key business insight.
 
 ---
 ### STRICT RULES
@@ -55,4 +60,7 @@ No prior task data provided. If necessary, load the raw data: `pd.read_csv("{{ d
 - **Binary Data Handling**: If the Y-axis is binary (e.g., Churn 0/1), **DO NOT use a Scatter Plot.** Use a **Box Plot** or a **Bar Chart of Means** to show the distribution of 'credits' for Churned vs. Retained groups.
 - Never use `inplace=True`.
 - Never include markdown fences (```) in the JSON fields.
+- Usee only the column names provided in the dataset context. Do not invent new column names.
+- Your interpretation must use the exact descriptive phrase provided by the Coder (e.g., if the Coder says 'very weak positive,' your title should say 'Very Weak Positive Relationship').
+- You must explicitly link the metric to the visual.
 """)

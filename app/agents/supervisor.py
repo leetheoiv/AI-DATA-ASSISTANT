@@ -11,6 +11,7 @@ class Supervisor(AIAgent):
         self.system_prompt = supervisor_prompt_template.render(
             dataset_context=context_data
         )
+        self.user_formatted_questions = None  # Store the formatted questions for use in follow-up prompts if clarification is needed
 
     def run_task(self, user_questions: list[str]) -> tuple[AnalysisPlan, str]:
         """
@@ -20,8 +21,8 @@ class Supervisor(AIAgent):
         """
         self.reset()  # ← replaces self.input_list = []; self.history = None
 
-        formatted_questions = self._format_questions(user_questions)
-        self.input_list.append({"role": "user", "content": formatted_questions})
+        self.user_formatted_questions = self._format_questions(user_questions)
+        self.input_list.append({"role": "user", "content": self.user_formatted_questions})
 
         while True:
             raw, plan, content = self.ask(
@@ -60,3 +61,4 @@ class Supervisor(AIAgent):
             f"but keep distinct analyses separate. Track which questions each task addresses.\n\n"
             f"{numbered}"
         )
+    

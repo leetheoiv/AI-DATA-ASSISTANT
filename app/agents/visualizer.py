@@ -3,12 +3,12 @@ from app.agent import AIAgent
 from app.prompt_templates.visualizer_prompt_template import visualizer_prompt_template
 from app.tools.execute_code import execute_code 
 from app.structured_outputs.coder_structured_output import CoderResponse # Reusing the structured schema
-
+from app.structured_outputs.visualizer_structured_output import VisualizerOutput
 class Visualizer(AIAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def run_task(self, current_task: str, dataset_context, dependencies: dict = None) -> tuple:
+    def run_task(self, current_task: str, dataset_context, dependencies: dict = None,namespace:dict=None) -> tuple:
         """
         Execute a visualization task, generating and saving high-quality charts.
         
@@ -26,7 +26,7 @@ class Visualizer(AIAgent):
         self.system_prompt = visualizer_prompt_template.render(
             current_task=current_task,
             dataset_context=dataset_context,
-            # dependencies=dependencies
+            dependencies=dependencies
         )
 
         current_prompt = current_task
@@ -37,7 +37,7 @@ class Visualizer(AIAgent):
             # 1. Generate Visualization Code
             _, parsed_response, _ = self.ask(
                 user_prompt=current_prompt,
-                response_model=CoderResponse
+                response_model=VisualizerOutput
             )
 
             if not parsed_response or not parsed_response.executable_code:
@@ -45,7 +45,7 @@ class Visualizer(AIAgent):
                 continue
 
             # 2. Execute Code (Saves PNG to disk)
-            result = execute_code(parsed_response.executable_code)
+            result = execute_code(parsed_response.executable_code,namespace=namespace)
 
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")

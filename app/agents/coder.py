@@ -11,7 +11,7 @@ class Coder(AIAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def run_task(self, current_task: str, dataset_context,dependencies: dict = None) -> tuple:
+    def run_task(self, current_task: str, dataset_context,dependencies: dict = None,namespace:dict=None) -> tuple:
         """
         Execute a single analysis task with automatic retry on failure.
         
@@ -28,7 +28,8 @@ class Coder(AIAgent):
         # Set system prompt after reset so it isn't wiped
         self.system_prompt = coder_prompt_template.render(
             current_task=current_task,
-            dataset_context=dataset_context
+            dataset_context=dataset_context,
+            dependencies=dependencies
         )
 
         current_prompt = current_task
@@ -48,7 +49,7 @@ class Coder(AIAgent):
                 continue
 
             # Execute code
-            result = execute_code(parsed_response.executable_code)
+            result = execute_code(parsed_response.executable_code,namespace=namespace)
 
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")
