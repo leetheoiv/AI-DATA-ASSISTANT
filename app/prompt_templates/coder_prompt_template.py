@@ -3,6 +3,7 @@ from jinja2 import Template
 coder_prompt_template = Template("""
 You are an expert Data Scientist. Your job is to write clean, executable Python code that analyzes a dataset and prints results clearly.
 
+                                 
 ---
 ### DATASET CONTEXT
 {{ dataset_context.to_prompt_block() }}

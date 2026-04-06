@@ -5,24 +5,39 @@ from app.structured_outputs.supervisor_structured_output import AnalysisPlan
 
 class Supervisor(AIAgent):
     """Supervisor agent that takes in user questions and produces a structured analysis plan, asking for clarifications as needed."""
-    def __init__(self, context_data: dict, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.context_data = context_data
-        self.system_prompt = supervisor_prompt_template.render(
-            dataset_context=context_data
-        )
+        
         self.user_formatted_questions = None  # Store the formatted questions for use in follow-up prompts if clarification is needed
-
-    def run_task(self, user_questions: list[str]) -> tuple[AnalysisPlan, str]:
+        self.analysis_goal = None  # Store the user's overall analysis goal for use in follow-up prompts
+        self.finalized_plan = None  # Store the finalized plan for potential use in follow-up prompts if needed 
+        
+    def run_task(self, user_questions: list[str],context_data: dict,analysis_goal: str=None,) -> tuple[AnalysisPlan, str]:
         """
         Accept a list of questions, return a finalized AnalysisPlan.
         Blocks internally until ambiguity is resolved via console/Streamlit callback.
         Returns: raw response, parsed AnalysisPlan, and the final response that led to the plan (useful for logging and debugging).
         """
         self.reset()  # ← replaces self.input_list = []; self.history = None
+        
+        # Step 1: Force the Goal Inquiry
+        print("\n[Supervisor] Phase 1: Strategic Alignment")
+        if analysis_goal:
+            self.analysis_goal = analysis_goal
+        else:
+            self.analysis_goal = input("What is the overall goal of this analysis? (e.g., 'Reduce Churn'): ").strip()
+        
 
+        # Step 2: Format the questions and add to input list
         self.user_formatted_questions = self._format_questions(user_questions)
         self.input_list.append({"role": "user", "content": self.user_formatted_questions})
+
+        # Step 3: Create Systen Prompt with context
+        self.system_prompt = supervisor_prompt_template.render(
+            dataset_context=context_data,
+            analysis_goal=analysis_goal
+        )
+
 
         while True:
             raw, plan, content = self.ask(
@@ -32,7 +47,10 @@ class Supervisor(AIAgent):
             if plan.status == "plan":
                 print("""[Supervisor]\nHere is my plan:""")
                 for i,task in enumerate(plan.tasks):
-                    print(f"  - {task.agent} task: {task.task_description} (depends on {task.depends_on})")
+                    print(f"  - {task.agent} task: {task.task_description} (depends on {task.depends_on} - Addresses question: '{task.user_question}')")
+                self.finalized_plan = plan  # Store the finalized plan for potential use in follow-up prompts if needed
+                self.finalized_plan.overall_goal = self.analysis_goal  # Add the overall goal to the finalized plan for potential use in follow-up prompts if needed
+
                 return raw, plan, content
 
             elif plan.status == "clarification":

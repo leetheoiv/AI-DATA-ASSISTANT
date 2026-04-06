@@ -98,7 +98,7 @@ class AIAgent:
         self.tokens_used += raw.usage.total_tokens
         self.history = raw.id
 
-    def ask(self, user_prompt: str = None, response_model=None, tool_map: dict = None) -> tuple:
+    def ask(self, user_prompt: str = None, response_model=None,use_tools=False, tool_map: dict = None) -> tuple:
         """
         Single entry point for all call types:
           - Plain text:            ask(user_prompt="...")
@@ -109,7 +109,7 @@ class AIAgent:
 
         raw = parsed = content = None # Initialize all to None for consistent return type, even if some calls don't populate them
 
-        if tool_map:
+        if use_tools == True:
             raw, content = self._ask_with_tools(tool_map)
         elif response_model:
             raw, parsed, content = self._ask_structured(response_model)

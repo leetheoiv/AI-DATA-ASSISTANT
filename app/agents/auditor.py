@@ -8,7 +8,7 @@ from app.tools.execute_code import execute_code
 from app.structured_outputs.evaluator_structured_output import AuditResult    
 
 
-class Auditor(AIAgent):
+class Evaluator(AIAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # The Auditor uses a "Checklist" prompt, not a planning prompt

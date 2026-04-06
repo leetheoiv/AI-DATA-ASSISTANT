@@ -30,6 +30,7 @@ class Visualizer(AIAgent):
         )
 
         current_prompt = current_task
+  
 
         for attempt in range(1, self.max_retries + 1):
             print(f"\n--- [Visualizer] Attempt {attempt}/{self.max_retries} ---")
@@ -49,12 +50,16 @@ class Visualizer(AIAgent):
 
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")
-                print(f"❌ Visualization failed: {error_msg.splitlines()[-1]}")
+                last_line = error_msg.splitlines()[-1] if error_msg else "No error message provided"
+                print(f"❌ Visualization failed: {last_line}")
 
                 current_prompt = (
-                    f"Your visualization code failed.\n\n"
-                    f"ERROR:\n{error_msg}\n\n"
-                    "Fix the syntax or logic (e.g., check column names or file paths) and return corrected code."
+                    f"Your visualization code failed: {last_line}.\n\n"
+                    "CRITICAL FIXES REQUIRED:\n"
+                    "1. DO NOT use backslashes (\) for line continuations. Use parentheses () instead.\n"
+                    "2. Check for stray characters at the end of lines or inside f-strings.\n"
+                    "3. Simplify the code: Remove complex custom titles if they are causing issues.\n"
+                    "Please provide the full corrected Python code block."
                 )
                 continue
 

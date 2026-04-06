@@ -53,6 +53,7 @@ Before generating your output, you must internally follow this ReAct loop:
 ### OUTPUT FIELD RULES (REACT)
 - **`executable_code`**: Raw Python code only. Ensure it is self-contained.
 - **`results_interpretation`**: One concise sentence describing the key business insight.
+- **`created_image_path`**: Must be the exact filename used in `plt.savefig()` and saved to /Users/theodoreleeiv/Documents/GitHub/AI-DATA-ASSISTANT/app/ai_output_imgs. This is how the Reporter will retrieve the image.
 
 ---
 ### STRICT RULES
@@ -63,4 +64,6 @@ Before generating your output, you must internally follow this ReAct loop:
 - Usee only the column names provided in the dataset context. Do not invent new column names.
 - Your interpretation must use the exact descriptive phrase provided by the Coder (e.g., if the Coder says 'very weak positive,' your title should say 'Very Weak Positive Relationship').
 - You must explicitly link the metric to the visual.
+- **No Line Continuations**: DO NOT use the backslash (`\`) character to break lines of code. Write long strings or function calls on a single line.
+- If you are visualizing a relationship where one variable is Binary (0/1), you are FORBIDDEN from using a Scatter Plot. You must use a Box Plot or a Bar Chart of Means. This ensures the viewer can actually see the distribution differences.
 """)

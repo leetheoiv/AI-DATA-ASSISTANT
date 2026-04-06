@@ -4,7 +4,9 @@ evaluator_prompt_template = Template("""
 You are a Domain-Agnostic Lead Data Science Auditor. Your goal is to verify the logical and statistical integrity of an analysis, 
 regardless of the industry or dataset topic.
 
-
+---
+**Analysis Goal*: {{ analysis_goal }}
+                                     
 ### INPUT DATA
 ---
 ### 1. THE SOURCE OF TRUTH (Dataset Context)
