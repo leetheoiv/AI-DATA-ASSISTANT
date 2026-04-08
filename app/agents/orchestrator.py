@@ -12,7 +12,7 @@ from app.support_functions.human_in_the_loop import HITL
 logger = logging.getLogger(__name__)
 
 class AnalysisOrchestrator:
-    def __init__(self, supervisor:Supervisor,evaluator:Evaluator,reporter:Reporter, api_key,dataset_context:DatasetContext,max_retries:int,model='gpt-4o-mini'):
+    def __init__(self, supervisor:Supervisor,evaluator:Evaluator,reporter:Reporter,coder:Coder,visualizer:Visualizer, api_key,dataset_context:DatasetContext,max_retries:int,model='gpt-4o-mini'):
         """
         The Engine that manages the flow of data between the Brain (Supervisor) 
         and the Hands (Agents).
@@ -21,8 +21,8 @@ class AnalysisOrchestrator:
         self.reporter = reporter
         self.evaluator = evaluator
         self.dataset_context = dataset_context  # Static facts about the data
-        self.agents = {"coder": Coder(api_key=api_key,model=model,max_retries=max_retries),
-                       "visualizer":Visualizer(api_key=api_key,model=model,max_retries=max_retries)}      # e.g., {"coder": Coder(...), "reporter": Reporter(...)}
+        self.agents = {"coder": self.coder,
+                       "visualizer": self.visualizer}      # e.g., {"coder": Coder(...), "reporter": Reporter(...)}
         self.task_results = {}                  # Stores output of each task index
         self.shared_namespace = {
         "pd": pd,
