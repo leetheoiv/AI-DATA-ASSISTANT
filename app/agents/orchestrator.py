@@ -6,6 +6,7 @@ from app.agents.auditor import Evaluator
 from app.agents.reporter import Reporter
 from app.structured_outputs.context import DatasetContext
 import pandas as pd
+from app.support_functions.human_in_the_loop import HITL
 
 # Set up logging to track the "Engine" performance
 logger = logging.getLogger(__name__)
@@ -30,7 +31,8 @@ class AnalysisOrchestrator:
         self.analysis_goal = None  # Store the user's overall analysis goal for use in follow-up prompts if clarification is needed
         self.plan = None           # Store the finalized plan for potential use in follow-up prompts if needed
         self.enriched_task_results = []  # Store the enriched task results for the Reporter to use in its final synthesis
-        
+        self.prereq_data = {}  # This dictionary will hold the specific outputs from prerequisite tasks, keyed by their index (e.g., {0: "Coder found a correlation of 0.04 between X and Y", ...})
+        self.human_in_the_loop = HITL()  # Initialize the Human-in-the-loop
 
     def execute_plan(self, user_questions: list[str]):
         # [PHASE 1] : Logical Planning
@@ -40,9 +42,18 @@ class AnalysisOrchestrator:
         # 1. Get the Supervisor's Plan
         print("[Orchestrator] Sending user questions to Supervisor for planning...")
         raw, plan, final_content = self.supervisor.run_task(user_questions,context_data=self.dataset_context)
-        # Store analysis goal
+
+        # 2. Humnan-in-the-loop checkpoint for plan review and logging
+        # --- [HUMAN IN THE LOOP START] ---
+        plan = self.human_in_the_loop.human_review_step(plan)
+        if not plan:
+            print("🚫 Plan rejected by human. Aborting.")
+            return
+        # --- [HUMAN IN THE LOOP END] ---
+      
+        # 3. Store analysis goal
         self.analysis_goal = self.supervisor.analysis_goal
-        # Store the finalized plan for potential use in follow-up prompts if needed
+        # 4. Store the finalized plan for potential use in follow-up prompts if needed
         self.plan = self.supervisor.finalized_plan
         
         print(f"\n[Orchestrator] Plan finalized. Executing {len(plan.tasks)} tasks.")
@@ -61,7 +72,7 @@ class AnalysisOrchestrator:
             # 2. Gather outputs from prerequisite tasks (Dynamic Context)
             # This ensures 'visualizer' gets the actual data from 'coder'
  
-            prereq_data = {}
+            
             for idx in task.depends_on:
                 if idx in self.task_results.keys():
                     # 1. Get the tuple: (raw_str, pydantic_obj, content_str)
@@ -73,19 +84,20 @@ class AnalysisOrchestrator:
                     # 2. Access the Pydantic object at index 0 and get the 'results_interpretation' field
                     raw_text = pydantic_obj['execution_output'][0].results_interpretation
                     clean_text = raw_text.replace("\n", " ").replace("\\", "").replace("'", "").strip()
-                    prereq_data[idx] = clean_text
+                    self.prereq_data[idx] = clean_text
                 else:
                     logger.warning(f"Prerequisite task {idx} has no recorded output. Agent '{task.agent}' may hallucinate or fail.")
-                    prereq_data[idx] = "No data from prerequisite task"
+                    self.prereq_data[idx] = "No data from prerequisite task"
             
+            print(f"[Orchestrator] Prerequisite data for Task {i}: {self.prereq_data}")
 
             # 3. Invoke the Agent
             # We pass: 1. The specific task, 2. The Static Rules, 3. The Dynamic Data
             try:
                 result = agent.run_task(
                     current_task=task.task_description,
-                    dataset_context=self.dataset_context, # The 'core/context.py' object
-                    dependencies=prereq_data,              # The outputs of previous tasks
+                    dataset_context=self.dataset_context,       # The 'core/context.py' object
+                    dependencies=self.prereq_data,              # The outputs of previous tasks
                     namespace=self.shared_namespace
                 )
                 
@@ -107,42 +119,101 @@ class AnalysisOrchestrator:
                 print(f'[Phase 2 Error]: Task {i} ({task.agent}) failed: {e}')
                 # We stop the loop because downstream tasks depend on this success
                 break
-        # [PHASE 3] : Final Synthesis by Reporter
-        # We enrich the raw task results with the Supervisor's original intent to give the Reporter full
-        self.enriched_task_results = self._enrich_task_results()
+        
+
+        # [PHASE 3] : Evaluation
+        print("\n[Orchestrator] All tasks executed. Sending results to Evaluator for auditing...")
+        # Send the entire plan and all task results to the Evaluator for a comprehensive audit
+        evaluation_result = self.evaluator.audit(
+            context_data=self.dataset_context,
+            user_questions=self.user_questions,
+            task_results=self.task_results
+        )
+
+        evaluation_result = self.human_in_the_loop.human_evaluation_review(evaluation_result)
+        
+        print(f"\n[Orchestrator] Evaluation completed. Passed: {evaluation_result.is_passed}")
+        if evaluation_result.is_passed == False:
+
+            print(f"Logical Conflicts: {evaluation_result.logical_conflicts}")
+            print(f"Technical Errors: {evaluation_result.technical_errors}")
+            print(f"Missing Answers: {evaluation_result.missing_answers}")
+            print(f"Recommendation for Supervisor: {evaluation_result.recommendation_for_supervisor}")
+            # Generate a correction plan based on the evaluation feedback
+            revised_plan = self.supervisor.generate_correction_plan(
+                previous_results=self.task_results,
+                evaluation_result=evaluation_result
+            )  
+
+    
+            # Execute only the tasks that the Supervisor flagged as needing correction
+            self.execute_corrections(revised_plan)
+
+            print('[DEBUG]: CHECKING FOR UPDATED TASKS AFTER CORRECTIONS', self.task_results)
+
+            # [PHASE 3] : Reporting 
+            # After corrections, we could loop back to the Reporter for a revised synthesis if needed, but for now we return the final report.
+            self.reporter.run_task(
+                overall_goal=self.analysis_goal,
+                task_results=self.task_results,
+                context_data=self.dataset_context
+            )
+        else:
+            print("\n[Orchestrator] All tasks executed. Sending results to Reporter for synthesis...")
+            
+            # [PHASE 3] : Reporting 
+            # Get Reporter's output (the final PDF path and the structured report data)
+            self.reporter.run_task(
+                overall_goal=self.analysis_goal,
+                task_results=self.task_results,
+                context_data=self.dataset_context
+            )
 
         # Return the final task's output (usually the Reporter's summary)
         final_idx = len(plan.tasks) - 1
         return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
     
-    def _enrich_task_results(self) -> list[dict]:
+    def execute_corrections(self, revised_plan):
         """
-        Pairs raw execution data with the Supervisor's original intent.
-        This ensures the Reporter knows 'Why' a piece of data exists.
+        Only executes tasks that the Supervisor flagged as corrections.
         """
-        enriched_context = []
-        
-        for i, task in enumerate(self.plan.tasks):
-            # 1. Safely fetch the result from the execution dictionary
-            raw_result = self.task_results.get(i)
-            
-            # 2. Extract the interpretation string (Handling potential agent failures)
-            if isinstance(raw_result, tuple) and len(raw_result) > 1:
-                # result is the Pydantic object, result is the string interpretation
-                interpretation = raw_result
-            elif isinstance(raw_result, str):
-                interpretation = raw_result
+        for task in revised_plan.tasks:
+            target_idx = task.original_index  # This is the index of the task in the original plan that this correction corresponds to
+  
+            if task.is_correction:
+                print(f"🔧 Correcting Task {target_idx} ({task.agent})...")
+                
+                # Re-run the specific agent with the updated instructions
+                result = self.agents[task.agent].run_task(
+                    current_task=task.task_description,
+                    dataset_context=self.dataset_context,
+                    dependencies=self._get_prereqs(task.depends_on),
+                    namespace=self.shared_namespace
+                )
+                
+                # Overwrite the old failed result with the corrected one
+                self.task_results[target_idx] = {
+                    "user_question": task.user_question,
+                    "agent": task.agent,
+                    "instruction": task.task_description,
+                    "execution_output": result
+                }
             else:
-                interpretation = "No result produced due to execution error."
+                print(f"✅ Skipping Task {target_idx} (Already passed/valid).")
+                
+        # After the scalpel pass, send the whole thing back to the Reporter
+        print("\n[Orchestrator] Corrections executed. Sending updated results to Reporter for revised synthesis...")
 
-            # 3. Build the enriched object
-            enriched_context.append({
-                "task_index": i,
-                "agent": task.agent,
-                "original_question": getattr(task, 'revised_question', "General Analysis"),
-                "instruction": task.task_description,
-                "result": interpretation,
-                "was_successful": "No result produced" not in interpretation
-            })
-            
-        return enriched_context
+    def _get_prereqs(self, indices):
+        """
+        Returns a dictionary mapping task indices to their string interpretations.
+        This is what the Jinja template expects for the 'dependencies' variable.
+        """
+        context = {}
+        for i in indices:
+            if i in self.task_results:
+                out = self.task_results[i]["execution_output"]
+                # Extract the interpretation string safely
+                text = out if isinstance(out, tuple) else getattr(out, 'results_interpretation', str(out))
+                context[i] = text
+        return context  

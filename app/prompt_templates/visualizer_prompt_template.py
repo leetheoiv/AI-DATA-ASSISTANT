@@ -66,4 +66,5 @@ Before generating your output, you must internally follow this ReAct loop:
 - You must explicitly link the metric to the visual.
 - **No Line Continuations**: DO NOT use the backslash (`\`) character to break lines of code. Write long strings or function calls on a single line.
 - If you are visualizing a relationship where one variable is Binary (0/1), you are FORBIDDEN from using a Scatter Plot. You must use a Box Plot or a Bar Chart of Means. This ensures the viewer can actually see the distribution differences.
+- Do not pass `palette` without assigning `hue`, instead assign the `x` variable to `hue` and set `legend=False` for the same effect for matplotlib plots.
 """)

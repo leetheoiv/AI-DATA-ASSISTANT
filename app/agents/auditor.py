@@ -14,7 +14,7 @@ class Evaluator(AIAgent):
         # The Auditor uses a "Checklist" prompt, not a planning prompt
         
 
-    def audit(self, user_questions, context_data: dict,task_outputs):
+    def audit(self, user_questions, context_data: dict,task_results: dict) -> AuditResult:
         # The Auditor returns a Simple Boolean + Feedback string
         # You don't even necessarily need a full AnalysisPlan Pydantic model here, 
         # just a "Pass/Fail" check.
@@ -22,7 +22,7 @@ class Evaluator(AIAgent):
         self.system_prompt = evaluator_prompt_template.render(
             dataset_context=context_data,
             user_questions=user_questions,
-            task_outputs=task_outputs
+            task_outputs=task_results
         )
 
         # 2. ASK with a simple trigger

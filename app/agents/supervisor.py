@@ -1,6 +1,7 @@
 # Import Libraries
 from app.agent import AIAgent
 from app.prompt_templates.supervisor_prompt_template import supervisor_prompt_template
+from app.prompt_templates.supervisor_corrective_planning_template import correction_prompt_template
 from app.structured_outputs.supervisor_structured_output import AnalysisPlan
 
 class Supervisor(AIAgent):
@@ -11,6 +12,7 @@ class Supervisor(AIAgent):
         self.user_formatted_questions = None  # Store the formatted questions for use in follow-up prompts if clarification is needed
         self.analysis_goal = None  # Store the user's overall analysis goal for use in follow-up prompts
         self.finalized_plan = None  # Store the finalized plan for potential use in follow-up prompts if needed 
+        self.corrections = []  # Store any corrections needed based on Evaluator feedback for potential use in follow-up prompts
         
     def run_task(self, user_questions: list[str],context_data: dict,analysis_goal: str=None,) -> tuple[AnalysisPlan, str]:
         """
@@ -80,3 +82,28 @@ class Supervisor(AIAgent):
             f"{numbered}"
         )
     
+    def generate_correction_plan(self, previous_results,evaluation_result):
+        # 1. Synthesize the Auditor's feedback into a single string for the template
+        detailed_feedback = (
+            f"LOGICAL CONFLICTS: {evaluation_result.logical_conflicts}\n"
+            f"TECHNICAL ERRORS: {evaluation_result.technical_errors}\n"
+            f"RECOMMENDATION: {evaluation_result.recommendation_for_supervisor}"
+        )
+
+        # 2. Format the previous (failed) outputs so the Supervisor sees the 'Bad' code/text
+        # We use the 'task_results' dict we built earlier
+        
+
+        # 3. Render the template
+        full_correction_prompt = correction_prompt_template.render(
+            feedback=detailed_feedback,
+            previous_outputs=previous_results
+        )
+
+        # 4. Ask the Supervisor for the REVISED AnalysisPlan
+        raw, revised_plan, content = self.ask(
+            user_prompt=full_correction_prompt,
+            response_model=AnalysisPlan
+        )
+
+        return revised_plan
