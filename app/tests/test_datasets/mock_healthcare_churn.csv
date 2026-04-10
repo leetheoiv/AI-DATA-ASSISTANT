@@ -1,0 +1,11 @@
+patient_id,age,gender,insurance_type,monthly_premium,billing_credits,last_visit_days_ago,churn,satisfaction_score
+P001,45,F,Private,180.0,25.0,12,0,4.5
+P002,62,M,Medicare,0.0,150.0,45,1,2.1
+P003,29,F,Employer,120.0,0.0,5,0,4.8
+P004,54,M,Private,210.0,75.0,120,1,3.2
+P005,38,F,Private,195.0,10.0,20,0,3.9
+P006,71,M,Medicare,0.0,200.0,180,1,1.5
+P007,41,F,Employer,115.0,0.0,8,0,4.7
+P008,50,M,Private,225.0,50.0,60,0,3.5
+P009,33,M,Employer,130.0,0.0,15,0,4.2
+P010,58,F,Medicare,0.0,300.0,90,1,2.8

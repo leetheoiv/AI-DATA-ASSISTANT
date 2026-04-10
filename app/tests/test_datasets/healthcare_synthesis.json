@@ -1,0 +1,17 @@
+[
+  {
+    "patient_id": "P001",
+    "visit_note": "Patient presents with mild hypertension. Blood pressure recorded at 145/90. Recommended reduction in sodium intake and follow-up in 3 months.",
+    "diagnosis": "Stage 1 Hypertension"
+  },
+  {
+    "patient_id": "P002",
+    "visit_note": "Post-operative follow-up for hip replacement. Patient reports high levels of dissatisfaction with the billing department regarding insurance coverage. Physical therapy is progressing slowly.",
+    "diagnosis": "Post-Op Recovery"
+  },
+  {
+    "patient_id": "P004",
+    "visit_note": "Patient complained of chronic lower back pain. No significant improvement since last visit. Discussed potential referral to pain management specialist.",
+    "diagnosis": "Chronic Back Pain"
+  }
+]
