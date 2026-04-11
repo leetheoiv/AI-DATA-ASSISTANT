@@ -49,7 +49,7 @@ class Coder(AIAgent):
                 continue
 
             # Execute code
-            result = execute_code(parsed_response.executable_code,namespace=namespace)
+            result = execute_code(parsed_response.executable_code,file_path=dataset_context.file_path,namespace=namespace)
 
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")

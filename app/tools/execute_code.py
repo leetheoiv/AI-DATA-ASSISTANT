@@ -2,46 +2,55 @@ import sys
 import io
 import traceback
 import contextlib
-
+import pandas as pd
 import regex as re
 #-----------------------------------------------------------------------------------------------------------------#
 #   Execute code                                                                                       #
 #-----------------------------------------------------------------------------------------------------------------#
 
-def execute_code(code: str, language: str = "python", namespace: dict = None):
+def execute_code(code: str, language: str = "python", file_path: str = None, namespace: dict = None):
     if language != "python":
-        return {
-            "status": "error", 
-            "message": f"Language {language} not supported."
-        }
+        return {"status": "error", "message": f"Language {language} not supported."}
     
-    # Use existing namespace if provided (maintains state across calls), or create a new one
     if namespace is None:
         namespace = {}
+    
+    # 1. HYDRATION (Ensures it survives every attempt)
+    try:
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        namespace['pd'] = pd
+        namespace['plt'] = plt
+        namespace['sns'] = sns
         
-    # Capture standard output (what the LLM prints)
+        if 'df' not in namespace and file_path:
+            namespace['df'] = pd.read_csv(file_path)
+    except Exception as e:
+        return {"status": "error", "message": f"Setup failed: {str(e)}"}
+        
     stdout_capture = io.StringIO()
     
-    sanitized = re.sub(r'\\\s*\n', ' ', code)
-    # 3. Strip leading/trailing whitespace that might hide invisible chars
-    sanitized = sanitized.strip()
+    # 2. SANITIZATION
+    # Fix backslashes and strip invisible characters
+    sanitized = re.sub(r'\\\s*\n', ' ', code).strip()
+    
     try:
-        # Redirect stdout to our StringIO buffer
         with contextlib.redirect_stdout(stdout_capture):
-            exec(code, {"__builtins__": __builtins__}, namespace)
+            # 3. USE SANITIZED CODE & SHARED SCOPE
+            # We pass namespace twice to make Globals == Locals
+            exec(sanitized, namespace, namespace)
             
         return {
             "status": "success",
             "output": stdout_capture.getvalue(),
-            "namespace": namespace  # Keep state intact
+            "namespace": namespace  
         }
         
     except Exception as e:
-        # Capture the full traceback if it fails
         error_msg = traceback.format_exc()
-        print(f"[Execution Error]: {e}", file=sys.stderr)
         return {
             "status": "error",
-            "output": stdout_capture.getvalue(), # Show what ran before it broke
+            "output": stdout_capture.getvalue(),
             "message": error_msg
         }

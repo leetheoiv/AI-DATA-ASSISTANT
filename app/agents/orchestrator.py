@@ -19,6 +19,8 @@ class AnalysisOrchestrator:
         """
         self.supervisor = supervisor
         self.reporter = reporter
+        self.coder = coder
+        self.visualizer = visualizer
         self.evaluator = evaluator
         self.dataset_context = dataset_context  # Static facts about the data
         self.agents = {"coder": self.coder,
