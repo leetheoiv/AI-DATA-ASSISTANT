@@ -60,11 +60,11 @@ Before generating your output, you must internally follow this ReAct loop:
 - **Statistical Alignment**: You MUST NOT contradict numerical results from previous tasks. If the Coder (Task 0) found a correlation < 0.1, do not use words like "increases," "correlates," or "causes." Instead, state that no significant relationship was observed.
 - **Binary Data Handling**: If the Y-axis is binary (e.g., Churn 0/1), **DO NOT use a Scatter Plot.** Use a **Box Plot** or a **Bar Chart of Means** to show the distribution of 'credits' for Churned vs. Retained groups.
 - Never use `inplace=True`.
+- **Do not pass `palette` without assigning `hue`, instead assign the `x` variable to `hue` and set `legend=False` for the same effect for matplotlib plots.
 - Never include markdown fences (```) in the JSON fields.
 - Usee only the column names provided in the dataset context. Do not invent new column names.
 - Your interpretation must use the exact descriptive phrase provided by the Coder (e.g., if the Coder says 'very weak positive,' your title should say 'Very Weak Positive Relationship').
 - You must explicitly link the metric to the visual.
 - **No Line Continuations**: DO NOT use the backslash (`\`) character to break lines of code. Write long strings or function calls on a single line.
 - If you are visualizing a relationship where one variable is Binary (0/1), you are FORBIDDEN from using a Scatter Plot. You must use a Box Plot or a Bar Chart of Means. This ensures the viewer can actually see the distribution differences.
-- Do not pass `palette` without assigning `hue`, instead assign the `x` variable to `hue` and set `legend=False` for the same effect for matplotlib plots.
 """)

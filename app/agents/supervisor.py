@@ -14,20 +14,23 @@ class Supervisor(AIAgent):
         self.finalized_plan = None  # Store the finalized plan for potential use in follow-up prompts if needed 
         self.corrections = []  # Store any corrections needed based on Evaluator feedback for potential use in follow-up prompts
         
-    def run_task(self, user_questions: list[str],context_data: dict,analysis_goal: str=None,) -> tuple[AnalysisPlan, str]:
+    def run_task(self, user_questions: list[str],context_data: dict,analysis_goal: str=None,HITL:bool=False) -> tuple[AnalysisPlan, str]:
         """
         Accept a list of questions, return a finalized AnalysisPlan.
         Blocks internally until ambiguity is resolved via console/Streamlit callback.
         Returns: raw response, parsed AnalysisPlan, and the final response that led to the plan (useful for logging and debugging).
+
+        HITL: If True Human in the loop is activated through python code
         """
         self.reset()  # ← replaces self.input_list = []; self.history = None
         
         # Step 1: Force the Goal Inquiry
         print("\n[Supervisor] Phase 1: Strategic Alignment")
-        if analysis_goal:
-            self.analysis_goal = analysis_goal
-        else:
-            self.analysis_goal = input("What is the overall goal of this analysis? (e.g., 'Reduce Churn'): ").strip()
+        if HITL == True:
+            if analysis_goal:
+                self.analysis_goal = analysis_goal
+            else:
+                self.analysis_goal = input("What is the overall goal of this analysis? (e.g., 'Reduce Churn'): ").strip()
         
 
         # Step 2: Format the questions and add to input list

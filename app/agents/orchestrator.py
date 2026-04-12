@@ -36,7 +36,146 @@ class AnalysisOrchestrator:
         self.prereq_data = {}  # This dictionary will hold the specific outputs from prerequisite tasks, keyed by their index (e.g., {0: "Coder found a correlation of 0.04 between X and Y", ...})
         self.human_in_the_loop = HITL()  # Initialize the Human-in-the-loop
 
+    def generate_initial_plan(self,user_questions: list[str]):
+        # [PHASE 1] : Logical Planning
+        # The supervisor blocks here for user clarification if needed.
+        self.user_questions.extend(user_questions)  # Store for potential use in follow-up prompts
+
+        # 1. Get the Supervisor's Plan
+        print("[Orchestrator] Sending user questions to Supervisor for planning...")
+        raw, plan, final_content = self.supervisor.run_task(user_questions,context_data=self.dataset_context)
+
+        return plan
+    
+    def run_execution_loop(self,finalized_plan):
+        # [PHASE 2] : Execution Loop
+        self.plan = finalized_plan
+    
+        for i, task in enumerate(self.plan.tasks):
+            print(f"\n--- [Task {i}] Agent: {task.agent} ---")
+            
+            # 1. Fetch the physical agent object
+            agent = self.agents.get(task.agent)
+            if not agent:
+                logger.error(f"Agent '{task.agent}' missing from registry. Aborting.")
+                break
+            
+
+            # 2. Gather outputs from prerequisite tasks (Dynamic Context)
+            # This ensures 'visualizer' gets the actual data from 'coder'
+ 
+            
+            for idx in task.depends_on:
+                if idx in self.task_results.keys():
+                    # 1. Get the tuple: (raw_str, pydantic_obj, content_str)
+                    task_output = self.task_results[idx]
+                    
+                    pydantic_obj = task_output
+                    
+    
+                    # 2. Access the Pydantic object at index 0 and get the 'results_interpretation' field
+                    raw_text = pydantic_obj['execution_output'][0].results_interpretation
+                    clean_text = raw_text.replace("\n", " ").replace("\\", "").replace("'", "").strip()
+                    self.prereq_data[idx] = clean_text
+                else:
+                    logger.warning(f"Prerequisite task {idx} has no recorded output. Agent '{task.agent}' may hallucinate or fail.")
+                    self.prereq_data[idx] = "No data from prerequisite task"
+            
+            print(f"[Orchestrator] Prerequisite data for Task {i}: {self.prereq_data}")
+
+            # 3. Invoke the Agent
+            # We pass: 1. The specific task, 2. The Static Rules, 3. The Dynamic Data
+            try:
+                result = agent.run_task(
+                    current_task=task.task_description,
+                    dataset_context=self.dataset_context,       # The 'core/context.py' object
+                    dependencies=self.prereq_data,              # The outputs of previous tasks
+                    namespace=self.shared_namespace
+                )
+                
+                # Update the namespace with whatever the agent just created
+                if result and "namespace" in result:
+                    self.shared_namespace.update(result["namespace"])
+                # 2. STORE THE UNIFIED RESULT (The Fix)
+                # We pair the execution 'result' with the 'task' metadata
+                self.task_results[i] = {
+                    "user_question": task.user_question, # Captured from Supervisor
+                    "agent": task.agent,
+                    "instruction": task.task_description,
+                    "execution_output": result # The (Pydantic, Interpretation) tuple
+                }
+                
+                
+            except Exception as e:
+                logger.error(f"Task {i} ({task.agent}) failed: {e}")
+                print(f'[Phase 2 Error]: Task {i} ({task.agent}) failed: {e}')
+                # We stop the loop because downstream tasks depend on this success
+                break
+    
+    def plan_evaluation(self,HITL:bool=False):
+        # [PHASE 3] : Evaluation
+        print("\n[Orchestrator] All tasks executed. Sending results to Evaluator for auditing...")
+        # Send the entire plan and all task results to the Evaluator for a comprehensive audit
+        evaluation_result = self.evaluator.audit(
+            context_data=self.dataset_context,
+            user_questions=self.user_questions,
+            task_results=self.task_results
+        )
+
+        if HITL == True:
+            evaluation_result = self.human_in_the_loop.human_evaluation_review(evaluation_result)
+        
+        print(f"\n[Orchestrator] Evaluation completed. Passed: {evaluation_result.is_passed}")
+        if evaluation_result.is_passed == False:
+
+            print(f"Logical Conflicts: {evaluation_result.logical_conflicts}")
+            print(f"Technical Errors: {evaluation_result.technical_errors}")
+            print(f"Missing Answers: {evaluation_result.missing_answers}")
+            print(f"Recommendation for Supervisor: {evaluation_result.recommendation_for_supervisor}")
+            # Generate a correction plan based on the evaluation feedback
+            revised_plan = self.supervisor.generate_correction_plan(
+                previous_results=self.task_results,
+                evaluation_result=evaluation_result
+            )  
+
+            return revised_plan
+        else:
+            return self.plan
+        
+    
+    def apply_evaluator_plan_corrections(self,revised_plan):
+        #[PHASE 3]: Plan Corrections
+
+        if revised_plan:
+            # Execute only the tasks that the Supervisor flagged as needing correction
+            self.execute_corrections(revised_plan)
+
+            print('[DEBUG]: CHECKING FOR UPDATED TASKS AFTER CORRECTIONS', self.task_results)
+
+         # [PHASE 4] : Reporting 
+        # Get Reporter's output (the final PDF path and the structured report data)
+        self.reporter.run_task(
+            overall_goal=self.analysis_goal,
+            task_results=self.task_results,
+            context_data=self.dataset_context
+        )
+
+        # Return the final task's output (usually the Reporter's summary)
+        final_idx = len(self.plan.tasks) - 1
+        return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
+
+
+            
+
+
+        # Return the final task's output (usually the Reporter's summary)
+        final_idx = len(self.plan.tasks) - 1
+        return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
+
     def execute_plan(self, user_questions: list[str]):
+        """
+        Implements entire agent orchestration in one go
+        """
         # [PHASE 1] : Logical Planning
         # The supervisor blocks here for user clarification if needed.
         self.user_questions.extend(user_questions)  # Store for potential use in follow-up prompts
