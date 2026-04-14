@@ -36,6 +36,7 @@ class AnalysisOrchestrator:
         self.prereq_data = {}  # This dictionary will hold the specific outputs from prerequisite tasks, keyed by their index (e.g., {0: "Coder found a correlation of 0.04 between X and Y", ...})
         self.human_in_the_loop = HITL()  # Initialize the Human-in-the-loop
 
+
     def generate_initial_plan(self,user_questions: list[str]):
         # [PHASE 1] : Logical Planning
         # The supervisor blocks here for user clarification if needed.
@@ -121,10 +122,11 @@ class AnalysisOrchestrator:
             user_questions=self.user_questions,
             task_results=self.task_results
         )
+        evaluation_status = evaluation_result.is_passed
 
         if HITL == True:
             evaluation_result = self.human_in_the_loop.human_evaluation_review(evaluation_result)
-        
+            
         print(f"\n[Orchestrator] Evaluation completed. Passed: {evaluation_result.is_passed}")
         if evaluation_result.is_passed == False:
 
@@ -138,19 +140,24 @@ class AnalysisOrchestrator:
                 evaluation_result=evaluation_result
             )  
 
-            return revised_plan
+            return evaluation_status,revised_plan
         else:
             return self.plan
         
     
-    def apply_evaluator_plan_corrections(self,revised_plan):
+    def apply_evaluator_plan_corrections(self,is_passed,plan):
+        """
+        plan: is the revised or original plan depending on whether the evaluation passed or failed. The Supervisor will have generated a revised plan if the evaluation failed, and the same plan will be returned if it passed.
+        """
         #[PHASE 3]: Plan Corrections
 
-        if revised_plan:
+        if is_passed == False:
+            print(f"[Orchestrator] Audit failed. Executing {len(plan.tasks)} revised tasks...")
             # Execute only the tasks that the Supervisor flagged as needing correction
-            self.execute_corrections(revised_plan)
+            self.execute_corrections(plan)
 
-            print('[DEBUG]: CHECKING FOR UPDATED TASKS AFTER CORRECTIONS', self.task_results)
+        else:
+            print("[Orchestrator] Audit passed. Skipping corrections.")
 
          # [PHASE 4] : Reporting 
         # Get Reporter's output (the final PDF path and the structured report data)
@@ -160,17 +167,12 @@ class AnalysisOrchestrator:
             context_data=self.dataset_context
         )
 
-        # Return the final task's output (usually the Reporter's summary)
-        final_idx = len(self.plan.tasks) - 1
-        return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
+        # # Return the final task's output (usually the Reporter's summary)
+        # final_idx = len(self.plan.tasks) - 1
+        # return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
 
 
-            
-
-
-        # Return the final task's output (usually the Reporter's summary)
-        final_idx = len(self.plan.tasks) - 1
-        return self.task_results.get(final_idx, "Analysis failed or was incomplete.")
+        
 
     def execute_plan(self, user_questions: list[str]):
         """

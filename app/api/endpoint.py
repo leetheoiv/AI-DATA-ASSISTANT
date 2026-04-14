@@ -13,7 +13,7 @@ import os
 import pandas as pd
 import uuid
 from http import HTTPStatus
-from fastapi import APIRouter,Depends, HTTPException,BackgroundTasks
+from fastapi import APIRouter,Depends, HTTPException,BackgroundTasks,Body
 from pydantic import BaseModel
 from starlette.responses import Response
 from typing import List,Dict
@@ -106,8 +106,12 @@ def start_analysis(request: AnalysisRequest):
         
         # Save the WHOLE object so we don't lose the namespace/results
         active_orchestrators[session_id] = orch
+
+        # Convert the Pydantic object to a dict and add the session_id
+        response_data = plan.model_dump() 
+        response_data["session_id"] = session_id
         
-        return {"session_id": session_id, "plan": plan}
+        return response_data
     
     except Exception as e:
         import traceback
@@ -138,27 +142,25 @@ async def approve_plan(
         "session_id": session_id
     }
 
-
 @router.post("/audit-results/{session_id}")
 def audit_results(orch: AnalysisOrchestrator = Depends(get_current_orchestrator)):
     # 1. Run evaluation (HITL is False here because the 'Human' is the web user)
-    revised_plan = orch.plan_evaluation(HITL=False)
-
+    is_passed,final_plan = orch.plan_evaluation(HITL=False)
     
-    # 2. Return the revised plan to the browser
-    # If the plan is the same as the original, the UI can just show "Passed!"
+
     return {
-        "is_passed": not bool(revised_plan), 
-        "revised_plan": revised_plan
+        "is_passed": is_passed, 
+        "plan": final_plan  # Always return the plan so the UI can render it
     }
 
+@router.post("/finalize/{session_id}")
 async def finalize(
-    session_id: str, # Add this
-    revised_plan: AnalysisPlan, 
-    background_tasks: BackgroundTasks,
+    is_passed:bool=Body(...),# looks inside the json data sent for the is_passed
+    plan: AnalysisPlan =Body(...), 
+    background_tasks: BackgroundTasks =None,
     orch: AnalysisOrchestrator = Depends(get_current_orchestrator)
 ):
     # Only add ONE task that handles the full sequence (Fix -> Report)
-    background_tasks.add_task(orch.apply_evaluator_plan_corrections, revised_plan)
+    background_tasks.add_task(orch.apply_evaluator_plan_corrections, is_passed,plan)
     
     return {"message": "Applying corrections and generating final report..."}

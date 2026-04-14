@@ -36,7 +36,16 @@ Account for these before any analysis:
 - {{ issue }}
 {% endfor %}
 {%- endif %}
-
+                                 
+{% if error_msgs %}
+   Your previous attempts resulted in the following errors, critically analyze them to fix your code:
+    <ul>
+    {% for msg in error_msgs %}
+        <li>{{ msg }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+                                 
 ---
 ### DEFENSIVE CODING STANDARDS
 - **No `inplace=True`** — fails in modern pandas due to Copy-on-Write. Always use explicit assignment:
@@ -62,9 +71,12 @@ You must populate all three fields:
 
 ---
 ### STRICT RULES
+- If you define long strings or SQL queries, always use triple quotes \"\"\" to avoid syntax errors."
 - Never use `inplace=True`
 - Never wrap code in triple quotes or markdown fences inside the JSON field
 - Never skip `print()` for any result, summary, or statistic
 - Never reference columns not present in the Dataset Context
 - Never leave `executable_code` empty
+                                 
+{%endif %}
 """)

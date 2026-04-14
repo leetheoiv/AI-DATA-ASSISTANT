@@ -18,6 +18,8 @@ def execute_code(code: str, language: str = "python", file_path: str = None, nam
     # 1. HYDRATION (Ensures it survives every attempt)
     try:
         import pandas as pd
+        import matplotlib
+        matplotlib.use('Agg') # This must come BEFORE importing pyplot
         import matplotlib.pyplot as plt
         import seaborn as sns
         namespace['pd'] = pd

@@ -6,6 +6,7 @@ from app.structured_outputs.coder_structured_output import CoderResponse # Reusi
 from app.structured_outputs.visualizer_structured_output import VisualizerOutput
 class Visualizer(AIAgent):
     def __init__(self, **kwargs):
+        self.error_msgs = []
         super().__init__(**kwargs)
 
     def run_task(self, current_task: str, dataset_context, dependencies: dict = None,namespace:dict=None) -> tuple:
@@ -21,18 +22,20 @@ class Visualizer(AIAgent):
             (parsed_response, output) on success
         """
         self.reset()
+        for attempt in range(1, self.max_retries + 1):
+            # Render the specialized visualizer prompt with design best practices
+            self.system_prompt = visualizer_prompt_template.render(
+                current_task=current_task,
+                dataset_context=dataset_context,
+                dependencies=dependencies,
+                error_msgs=self.error_msgs
+            )
 
-        # Render the specialized visualizer prompt with design best practices
-        self.system_prompt = visualizer_prompt_template.render(
-            current_task=current_task,
-            dataset_context=dataset_context,
-            dependencies=dependencies
-        )
-
-        current_prompt = current_task
+            current_prompt = current_task
   
 
-        for attempt in range(1, self.max_retries + 1):
+        
+            print(self.system_prompt)
             print(f"\n--- [Visualizer] Attempt {attempt}/{self.max_retries} ---")
 
             # 1. Generate Visualization Code
@@ -51,16 +54,11 @@ class Visualizer(AIAgent):
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")
                 last_line = error_msg.splitlines()[-1] if error_msg else "No error message provided"
+
                 print(f"❌ Visualization failed: {last_line}")
 
-                current_prompt = (
-                    f"Your visualization code failed: {last_line}.\n\n"
-                    "CRITICAL FIXES REQUIRED:\n"
-                    "1. DO NOT use backslashes (\) for line continuations. Use parentheses () instead.\n"
-                    "2. Check for stray characters at the end of lines or inside f-strings.\n"
-                    "3. Simplify the code: Remove complex custom titles if they are causing issues.\n"
-                    "Please provide the full corrected Python code block."
-                )
+                self.error_msgs.append(f"Attempt {attempt}: {last_line}")
+                
                 continue
 
             if result["status"] == "success":
@@ -68,7 +66,10 @@ class Visualizer(AIAgent):
                 
                 # NEW LOGIC: Pass the dependency data (Coder's math) 
                 # to the interpreter so it doesn't hallucinate a trend.
-                coder_math = dependencies.get(0, "No previous math provided")
+                coder_math = None
+
+                if dependencies:
+                    coder_math = dependencies.get(0, "No previous math provided")
                 
                 # We pass the Coder's actual output to the interpretation prompt
                 parsed_response.results_interpretation = self._interpret_visual(
@@ -94,17 +95,26 @@ class Visualizer(AIAgent):
         self.input_list = []
         self.history = None
 
-        _, _, interpretation = self.ask(
-            user_prompt=(
-                f"Task: {task}\n\n"
-                f"The Coder previously found these statistics: {coder_results}\n\n"
-                f"Your code execution logs: {output}\n\n"
-                "Based on the visual you created AND the statistics above, "
-                "provide a one-sentence business insight. "
-                "CRITICAL: If the statistics show no correlation, the visual interpretation "
-                "must explicitly state that no clear relationship was found."
+        if coder_results:
+            _, _, interpretation = self.ask(
+                user_prompt=(
+                    f"Task: {task}\n\n"
+                    f"The Coder previously found these statistics: {coder_results}\n\n"
+                    f"Your code execution logs: {output}\n\n"
+                    "Based on the visual you created AND the statistics above, "
+                    "provide a one-sentence business insight. "
+                    "CRITICAL: If the statistics show no correlation, the visual interpretation "
+                    "must explicitly state that no clear relationship was found."
+                )
             )
-        )
+        else:
+            _, _, interpretation = self.ask(
+                user_prompt=(
+                    f"Task: {task}\n\n"
+                    f"Your code execution logs: {output}\n\n"
+                    "Based on the visual you created, provide a one-sentence business insight."
+                )
+            )
 
         self.input_list = saved_input_list
         self.history = saved_history

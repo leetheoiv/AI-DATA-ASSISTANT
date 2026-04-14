@@ -21,7 +21,7 @@ class Reporter(AIAgent):
         # 1. Get the structured data (the "Draft")
         if self.report_data is not None:
             print("[Reporter] Report already generated. Returning existing report.")
-            report_data = self.report
+
             return self.report_data
         else:
             self.report_data = self.generate_report(overall_goal,  task_results,context_data)

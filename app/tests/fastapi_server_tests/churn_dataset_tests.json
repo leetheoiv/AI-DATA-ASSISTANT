@@ -1,0 +1,24 @@
+// step 1
+{
+  "dataset_context": {
+    "file_path": "/Users/theodoreleeiv/Documents/GitHub/AI-DATA-ASSISTANT/app/tests/test_datasets/churn.csv",
+    "dataset_description": "Monthly churn snapshot for Q3 2024.",
+    "column_descriptions": {
+      "churn": "1 = churned (bad), 0 = retained",
+      "credits": "Billing credits — high values indicate disputes",
+      "plan_type": "Subscription tier: prepaid, postpaid, enterprise"
+    },
+    "business_rules": [
+      "credits: high = bad — indicates billing disputes or failures",
+      "churn: 1 = bad outcome, 0 = good",
+      "arpu: higher = better"
+    ],
+    "sensitivity": "internal",
+    "known_issues": []
+  },
+  "user_questions": [
+    "What is the correlation between billing credits and churn?",
+    "how does churn differ between plan types?"
+  ],
+  "overall_goal": "Provide data-driven insights"
+}

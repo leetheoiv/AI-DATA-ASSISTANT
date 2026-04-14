@@ -11,8 +11,9 @@ from typing import Literal,Optional,List
 class AnalysisTask(BaseModel):
     agent: Literal["coder", "visualizer", "reporter"]
     user_question: str = Field(description="The original user question this task helps answer.")
+    # relevant_dataset_columns: List[str] = Field(description='Contains the actual column names of the dataset the user is referring to')
     task_description: str
-    depends_on: List[int]
+    depends_on: List[int] =[]
     # Optional: Keep revised_question if the Supervisor wants to 'Technical-ize' it
     revised_question: Optional[str] = None
     is_correction: bool = Field(default=False, description="Set to True if this task is a rewrite to fix an audit error.")

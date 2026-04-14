@@ -10,6 +10,7 @@ from app.structured_outputs.coder_structured_output import CoderResponse
 class Coder(AIAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.error_msgs = []  # To store error messages across retries
 
     def run_task(self, current_task: str, dataset_context,dependencies: dict = None,namespace:dict=None) -> tuple:
         """
@@ -25,16 +26,17 @@ class Coder(AIAgent):
         """
         self.reset()
 
-        # Set system prompt after reset so it isn't wiped
-        self.system_prompt = coder_prompt_template.render(
-            current_task=current_task,
-            dataset_context=dataset_context,
-            dependencies=dependencies
-        )
-
-        current_prompt = current_task
-
         for attempt in range(1, self.max_retries + 1):
+            # Set system prompt after reset so it isn't wiped
+            self.system_prompt = coder_prompt_template.render(
+                current_task=current_task,
+                dataset_context=dataset_context,
+                dependencies=dependencies,
+                error_msgs=self.error_msgs
+            )
+
+            current_prompt = current_task
+
             print(f"\n🔄 Attempt {attempt}/{self.max_retries}")
 
             # Generate code
@@ -47,24 +49,22 @@ class Coder(AIAgent):
                 print("⚠️  No executable code returned — retrying.")
                 current_prompt = "You did not return executable code. Try again and ensure the 'executable_code' field is populated."
                 continue
-
+            clean_code = parsed_response.executable_code
+            # Remove markdown backticks if the LLM hallucinated them into the string
+            if clean_code.startswith("```python"):
+                clean_code = clean_code.split("```python").split("```").strip()
+            elif clean_code.startswith("```"):
+                clean_code = clean_code.split("```").split("```").strip()
             # Execute code
             result = execute_code(parsed_response.executable_code,file_path=dataset_context.file_path,namespace=namespace)
 
             if result["status"] == "error":
                 error_msg = result.get("message", "Unknown error")
                 stdout_before_crash = result.get("output", "")
-                print(f"❌ Attempt {attempt} failed:\n{error_msg.splitlines()[-1]}")
+                last_line = error_msg.splitlines()[-1] if error_msg else "No error message"
+                print(f"❌ Attempt {attempt} failed:\n{last_line}")
+                self.error_msgs.append(f"Attempt {attempt} error: {last_line}\nStdout before crash:\n{stdout_before_crash}")
 
-                # REFINED FEEDBACK FOR THE AGENT
-                # This becomes the 'user_prompt' for the NEXT iteration of the loop
-                current_prompt = (
-                    f"Your code failed on attempt {attempt}.\n\n"
-                    f"ERROR:\n{error_msg}\n\n"
-                    f"STDOUT BEFORE CRASH:\n{stdout_before_crash or 'None'}\n\n"
-                    "CRITICAL: Identify the root cause (check for unterminated strings or missing files), "
-                    "fix the logic, and return the corrected code block."
-                )
                 continue
 
             # Success — get interpretation via a fresh isolated call
