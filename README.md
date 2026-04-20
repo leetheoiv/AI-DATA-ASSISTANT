@@ -37,7 +37,7 @@ The orchestrator produces a numbered list of analysis steps. You approve, edit, 
 ### 6. Tool-use execution loop
 Worker agents execute each approved step using specialised tools — statistical computation, chart generation, and data transformation. Results stream back into the session.
 
-### 7. Export to PowerPoint
+### 7. Export to PDF
 The assistant compiles findings, charts, narrative summaries, and your annotations into a structured `.pdf` report.
 
 ---
