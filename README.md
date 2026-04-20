@@ -11,7 +11,7 @@
 
 ## Overview
 
-This tool is a multi-step, agentic data analysis assistant built with **Streamlit** and the **Anthropic Claude API**. It follows an orchestrator-worker agent architecture inspired by Anthropic's *Building Effective Agents* framework — decomposing analytical questions into discrete, approvable steps, executing them with tool-use loops, and synthesising results into a shareable PowerPoint report.
+This tool is a multi-step, agentic data analysis assistant built with **OpenAI**. It follows an orchestrator-worker agent architecture inspired by Anthropic's *Building Effective Agents* framework — decomposing analytical questions into discrete, approvable steps, executing them with tool-use loops, and synthesising results into a shareable PowerPoint report.
 
 **Human-in-the-loop by design.** Every analysis plan is surfaced for your review before any computation runs. You approve, modify, or remove steps — the model never acts unilaterally.
 
