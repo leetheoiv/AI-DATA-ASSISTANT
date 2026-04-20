@@ -37,11 +37,8 @@ The orchestrator produces a numbered list of analysis steps. You approve, edit, 
 ### 6. Tool-use execution loop
 Worker agents execute each approved step using specialised tools — statistical computation, chart generation, and data transformation. Results stream back into the session.
 
-### 7. Interpret and annotate visuals
-For each chart produced, you can supply your own interpretation. These annotations are stored and included verbatim in the final report, preserving business context.
-
-### 8. Export to PowerPoint
-The assistant compiles findings, charts, narrative summaries, and your annotations into a structured `.pptx` report — ready to share with stakeholders.
+### 7. Export to PowerPoint
+The assistant compiles findings, charts, narrative summaries, and your annotations into a structured `.pdf` report.
 
 ---
 
@@ -51,98 +48,7 @@ The assistant uses an **orchestrator-worker** pattern. A high-level orchestrator
 
 Built following Anthropic's **Building Effective Agents** framework: tool-calling loops, explicit state management, and minimal, composable agent roles.
 
-### Project Structure
 
-```
-├── app.py                      ← Streamlit entry point & session state
-├── orchestrator/
-│   ├── planner.py              ← question decomposition & plan generation
-│   └── reviewer.py             ← human-in-the-loop step approval UI
-├── workers/
-│   ├── analyst.py              ← statistical analysis worker
-│   ├── visualiser.py           ← chart generation worker
-│   └── reporter.py             ← PowerPoint assembly
-├── tools/
-│   └── tool_definitions.py     ← all tool schemas (Anthropic format)
-├── client/
-│   └── spectrum_client.py      ← custom Anthropic API wrapper
-└── requirements.txt
-```
-
----
-
-## Tech Stack
-
-| Library | Role |
-|---|---|
-| `streamlit` | UI layer, session state, file uploads |
-| `anthropic` | Claude API — orchestration & tool-calling |
-| `pandas` | Dataset loading, profiling, transformation |
-| `matplotlib` / `plotly` | Chart generation via tool-use |
-| `python-pptx` | PowerPoint report assembly |
-| `SpectrumClient` | Custom API client with retry & logging |
-
----
-
-## Getting Started
-
-### 1. Clone & install
-
-```bash
-git clone https://github.com/your-username/data-analysis-assistant.git
-cd data-analysis-assistant
-
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-```
-
-### 2. Configure your API key
-
-```bash
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
-```
-
-> ⚠️ Never commit your `.env` file. It is listed in `.gitignore` by default.
-
-### 3. Run the app
-
-```bash
-streamlit run app.py
-```
-
-The app will open at `http://localhost:8501`.
-
----
-
-## Usage Tips
-
-- **Be specific with context.** The richer the dataset description you provide in step 3, the more grounded the model's analysis plan will be.
-- **Treat the plan review seriously.** This is your primary lever for quality. Remove steps that aren't relevant; add specific metrics you care about.
-- **Add interpretations before exporting.** The model's chart summaries are starting points — your domain knowledge makes the report useful to stakeholders.
-- **Large datasets.** For files over ~50MB, consider sampling before upload to keep latency reasonable.
-
----
-
-## Roadmap
-
-- [ ] Checkpointing & session persistence (LangGraph / custom SQLite store)
-- [ ] Streaming plan generation with live step-by-step reveal
-- [ ] Multi-dataset joins and cross-file analysis
-- [ ] Export to PDF and Tableau-ready `.hyper` extracts
-- [ ] Memory of past sessions for iterative, longitudinal analysis
-
----
-
-## Contributing
-
-Pull requests are welcome. For significant changes, please open an issue first to discuss scope. All contributions should include updated docstrings and, where relevant, a brief note in the changelog.
-
-```bash
-ruff check .
-black --check .
-```
 
 ---
 
