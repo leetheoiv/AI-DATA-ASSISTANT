@@ -32,7 +32,7 @@ The **AI Data Assistant** is an AI-powered data analysis system that:
 ✅ **Tool-use execution** — Agents can write and execute Python code independently  
 ✅ **Rich reporting** — Automatically generates PowerPoint reports with findings  
 ✅ **FastAPI integration** — RESTful API for programmatic access  
-✅ **Extensible design** — Easy to add new agents and capabilities  
+✅ **Extensible design** — Easy to add new agents and capabilities
 
 ---
 
@@ -227,14 +227,14 @@ app/agents/
 
 **Agent Purposes:**
 
-| Agent | Purpose | Input | Output |
-|-------|---------|-------|--------|
-| **Supervisor** | Creates a high-level analysis plan from user questions | User questions, dataset context | `AnalysisPlan` (list of tasks) |
-| **Coder** | Writes Python code to analyze data and executes it | Task description, dataset context | `CoderResponse` (code, results) |
-| **Visualizer** | Creates charts and plots from data | Task description, analysis results | `VisualizerResponse` (chart files) |
-| **Reporter** | Synthesizes all findings into a polished report | All task results, visualizations | `ReporterResponse` (structured report) |
-| **Auditor** | Evaluates result quality and suggests corrections | All task results, original plan | `AuditorResponse` (pass/fail + corrections) |
-| **Orchestrator** | Directs the entire workflow | User input, orchestrates other agents | Coordinates all phases |
+| Agent            | Purpose                                                | Input                                 | Output                                      |
+| ---------------- | ------------------------------------------------------ | ------------------------------------- | ------------------------------------------- |
+| **Supervisor**   | Creates a high-level analysis plan from user questions | User questions, dataset context       | `AnalysisPlan` (list of tasks)              |
+| **Coder**        | Writes Python code to analyze data and executes it     | Task description, dataset context     | `CoderResponse` (code, results)             |
+| **Visualizer**   | Creates charts and plots from data                     | Task description, analysis results    | `VisualizerResponse` (chart files)          |
+| **Reporter**     | Synthesizes all findings into a polished report        | All task results, visualizations      | `ReporterResponse` (structured report)      |
+| **Auditor**      | Evaluates result quality and suggests corrections      | All task results, original plan       | `AuditorResponse` (pass/fail + corrections) |
+| **Orchestrator** | Directs the entire workflow                            | User input, orchestrates other agents | Coordinates all phases                      |
 
 **Key Agent Files:**
 
@@ -342,6 +342,7 @@ app/structured_outputs/
 **Why Pydantic?**
 
 Pydantic models:
+
 - Validate LLM output and raise structured errors if invalid
 - Auto-convert JSON to Python objects
 - Provide type hints for IDE support
@@ -515,7 +516,7 @@ class AIAgent:
         self.temperature = temperature
         self.max_retries = max_retries
         self.input_list = []  # Conversation history
-        
+
     def ask(self, response_model, user_prompt=None):
         """Call LLM and return structured response"""
         # ... (implementation details)
@@ -537,6 +538,7 @@ Immutable metadata about the dataset passed to all agents.
 **Why separate context from data?**
 
 Passing context to every agent:
+
 - Ensures consistent understanding of the data
 - Prevents agents from making bad assumptions
 - Reduces token usage (context is pre-computed)
@@ -580,7 +582,7 @@ Safely runs Python code without affecting the rest of the system.
 def execute_code(code, language="python", file_path=None, namespace=None):
     """
     Execute Python code in an isolated namespace.
-    
+
     Returns:
         {
             "status": "success" | "error",
@@ -738,18 +740,18 @@ pip install -r requirements.txt
 
 ## Summary
 
-| What | Where | Purpose |
-|------|-------|---------|
-| **FastAPI app** | `main.py` | Entry point for HTTP requests |
-| **Agents** | `app/agents/` | Specialized workers (Plan, Code, Visualize, Report, Audit) |
-| **Prompts** | `app/prompt_templates/` | LLM system prompts for each agent |
-| **Models** | `app/structured_outputs/` | Pydantic validation for LLM outputs |
-| **API routes** | `app/api/` | REST endpoints (start, approve, audit, finalize) |
-| **Tools** | `app/tools/` | Capabilities agents can use (code execution, PDF) |
-| **Context** | `app/structured_outputs/context.py` | Dataset metadata shared to all agents |
-| **Orchestrator** | `app/agents/orchestrator.py` | Coordinates 5-phase workflow |
-| **Tests** | `app/tests/` | Sample datasets and test code |
-| **Config** | `app/settings.py` | Environment variables and setup |
+| What             | Where                               | Purpose                                                    |
+| ---------------- | ----------------------------------- | ---------------------------------------------------------- |
+| **FastAPI app**  | `main.py`                           | Entry point for HTTP requests                              |
+| **Agents**       | `app/agents/`                       | Specialized workers (Plan, Code, Visualize, Report, Audit) |
+| **Prompts**      | `app/prompt_templates/`             | LLM system prompts for each agent                          |
+| **Models**       | `app/structured_outputs/`           | Pydantic validation for LLM outputs                        |
+| **API routes**   | `app/api/`                          | REST endpoints (start, approve, audit, finalize)           |
+| **Tools**        | `app/tools/`                        | Capabilities agents can use (code execution, PDF)          |
+| **Context**      | `app/structured_outputs/context.py` | Dataset metadata shared to all agents                      |
+| **Orchestrator** | `app/agents/orchestrator.py`        | Coordinates 5-phase workflow                               |
+| **Tests**        | `app/tests/`                        | Sample datasets and test code                              |
+| **Config**       | `app/settings.py`                   | Environment variables and setup                            |
 
 ---
 

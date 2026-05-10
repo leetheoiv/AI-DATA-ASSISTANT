@@ -62,6 +62,7 @@ The server will start at `http://127.0.0.1:8000`
 ### API Documentation
 
 FastAPI automatically generates interactive API documentation at:
+
 - **Swagger UI**: `http://127.0.0.1:8000/docs`
 - **ReDoc**: `http://127.0.0.1:8000/redoc`
 
@@ -72,11 +73,13 @@ FastAPI automatically generates interactive API documentation at:
 All endpoints are prefixed with `/analysis/`
 
 ### 1. Start Analysis
+
 **Endpoint**: `POST /analysis/start-analysis`
 
 Initiates a new analysis session and generates an initial plan.
 
 **Request Body**:
+
 ```json
 {
   "dataset_context": {
@@ -102,6 +105,7 @@ Initiates a new analysis session and generates an initial plan.
 ```
 
 **Response**: An `AnalysisPlan` object with:
+
 - `session_id`: Unique identifier for this analysis session
 - `tasks`: List of planned analysis tasks
 - `task_descriptions`: Description of each task
@@ -112,14 +116,17 @@ Initiates a new analysis session and generates an initial plan.
 ---
 
 ### 2. Approve Plan
+
 **Endpoint**: `POST /analysis/approve-plan/{session_id}`
 
 Approves the generated plan and starts execution in the background.
 
 **Path Parameters**:
+
 - `session_id` (string): The session ID returned from `/start-analysis`
 
 **Request Body**:
+
 ```json
 {
   "plan": {
@@ -132,6 +139,7 @@ Approves the generated plan and starts execution in the background.
 ```
 
 **Response**:
+
 ```json
 {
   "status": "success",
@@ -145,16 +153,19 @@ Approves the generated plan and starts execution in the background.
 ---
 
 ### 3. Audit Results
+
 **Endpoint**: `POST /analysis/audit-results/{session_id}`
 
 Evaluates the completed analysis results for quality and identifies any issues.
 
 **Path Parameters**:
+
 - `session_id` (string): The session ID from your analysis
 
 **Request Body**: Empty `{}`
 
 **Response**:
+
 ```json
 {
   "is_passed": true,
@@ -169,14 +180,17 @@ Evaluates the completed analysis results for quality and identifies any issues.
 ---
 
 ### 4. Finalize
+
 **Endpoint**: `POST /analysis/finalize/{session_id}`
 
 Applies evaluator corrections (if needed) and generates the final report.
 
 **Path Parameters**:
+
 - `session_id` (string): The session ID from your analysis
 
 **Request Body**:
+
 ```json
 {
   "is_passed": true,
@@ -187,6 +201,7 @@ Applies evaluator corrections (if needed) and generates the final report.
 ```
 
 **Response**:
+
 ```json
 {
   "message": "Applying corrections and generating final report..."
@@ -234,6 +249,7 @@ curl -X POST "http://127.0.0.1:8000/analysis/start-analysis" \
 **Save the returned `session_id`** — you'll need it for the next steps.
 
 Example response:
+
 ```json
 {
   "session_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -246,6 +262,7 @@ Example response:
 #### Step 2: Review and Approve the Plan
 
 The plan returned in Step 1 shows what the Supervisor agent intends to do. You can:
+
 - Review it in your application UI
 - Modify task descriptions or order if needed
 - Approve it to begin execution
@@ -262,6 +279,7 @@ curl -X POST "http://127.0.0.1:8000/analysis/approve-plan/550e8400-e29b-41d4-a71
 ```
 
 Response indicates execution has started in the background:
+
 ```json
 {
   "status": "success",
@@ -273,11 +291,13 @@ Response indicates execution has started in the background:
 #### Step 3: Wait for Execution to Complete
 
 The agents run in the background. In a real application, you would:
+
 - Poll the session status at intervals
 - Use WebSockets or push notifications to alert when ready
 - Display a progress indicator to the user
 
 Execution time depends on:
+
 - Dataset size
 - Number and complexity of questions
 - API response times
@@ -293,6 +313,7 @@ curl -X POST "http://127.0.0.1:8000/analysis/audit-results/550e8400-e29b-41d4-a7
 ```
 
 Response:
+
 ```json
 {
   "is_passed": true,
@@ -326,6 +347,7 @@ curl -X POST "http://127.0.0.1:8000/analysis/finalize/550e8400-e29b-41d4-a716-44
 ```
 
 Response:
+
 ```json
 {
   "message": "Applying corrections and generating final report..."
@@ -418,27 +440,27 @@ async function runAnalysis() {
       column_descriptions: {
         churn: "1 = churned (bad), 0 = retained",
         credits: "Billing credits — high values indicate disputes",
-        plan_type: "Subscription tier: prepaid, postpaid, enterprise"
+        plan_type: "Subscription tier: prepaid, postpaid, enterprise",
       },
       business_rules: [
         "credits: high = bad — indicates billing disputes or failures",
         "churn: 1 = bad outcome, 0 = good",
-        "arpu: higher = better"
+        "arpu: higher = better",
       ],
       sensitivity: "internal",
-      known_issues: []
+      known_issues: [],
     },
     user_questions: [
       "What is the correlation between billing credits and churn?",
-      "How does churn differ between plan types?"
+      "How does churn differ between plan types?",
     ],
-    overall_goal: "Provide data-driven insights"
+    overall_goal: "Provide data-driven insights",
   };
 
   const startResponse = await fetch(`${BASE_URL}/start-analysis`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(startPayload)
+    body: JSON.stringify(startPayload),
   });
 
   const plan = await startResponse.json();
@@ -449,20 +471,20 @@ async function runAnalysis() {
   const approveResponse = await fetch(`${BASE_URL}/approve-plan/${sessionId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(plan)
+    body: JSON.stringify(plan),
   });
 
   const approveResult = await approveResponse.json();
   console.log("Approve Result:", approveResult);
 
   // Step 3: Wait for execution
-  await new Promise(resolve => setTimeout(resolve, 10000));
+  await new Promise((resolve) => setTimeout(resolve, 10000));
 
   // Step 4: Audit Results
   const auditResponse = await fetch(`${BASE_URL}/audit-results/${sessionId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({})
+    body: JSON.stringify({}),
   });
 
   const auditResult = await auditResponse.json();
@@ -474,8 +496,8 @@ async function runAnalysis() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       is_passed: auditResult.is_passed,
-      plan: auditResult.plan
-    })
+      plan: auditResult.plan,
+    }),
   });
 
   const finalizeResult = await finalizeResponse.json();
@@ -492,6 +514,7 @@ runAnalysis();
 ### Session Storage
 
 Currently, sessions are stored in-memory in the `active_orchestrators` dictionary. This means:
+
 - Sessions are lost when the server restarts
 - Only one instance of the application can be run
 
@@ -500,6 +523,7 @@ Currently, sessions are stored in-memory in the `active_orchestrators` dictionar
 For production, consider:
 
 1. **Persistent Storage**: Move sessions to Redis or a database
+
 ```python
 # Example: Using Redis
 import redis
@@ -508,6 +532,7 @@ active_orchestrators = redis_client  # Store orchestrator objects
 ```
 
 2. **Session Timeout**: Add expiration for long-running sessions
+
 ```python
 @router.get("/session/{session_id}")
 def get_session_status(session_id: str):
@@ -523,6 +548,7 @@ def get_session_status(session_id: str):
 ```
 
 3. **Authentication**: Add API key or OAuth authentication
+
 ```python
 from fastapi.security import HTTPBearer
 
@@ -545,11 +571,13 @@ async def start_analysis(request: AnalysisRequest, credentials = Depends(securit
 **Problem**: `"detail": "Analysis session not found."`
 
 **Causes**:
+
 - Server was restarted (sessions are lost)
 - Session ID is incorrect
 - Session expired
 
 **Solution**:
+
 - Verify the session ID is correct
 - Start a new analysis if the server was restarted
 
@@ -558,11 +586,13 @@ async def start_analysis(request: AnalysisRequest, credentials = Depends(securit
 **Problem**: Request times out waiting for response
 
 **Causes**:
+
 - Large dataset taking too long to process
 - API rate limits hit
 - Network connectivity issues
 
 **Solution**:
+
 - Use background tasks (already implemented in `/approve-plan`)
 - Monitor agent execution logs in `logs/agent.log`
 - Increase request timeout in your client
@@ -572,10 +602,12 @@ async def start_analysis(request: AnalysisRequest, credentials = Depends(securit
 **Problem**: `"Error: OPENAI_API_KEY not found"`
 
 **Causes**:
+
 - `.env` file not created or not in root directory
 - `OPENAI_API_KEY` not set in environment
 
 **Solution**:
+
 ```bash
 # Create .env file with your OpenAI API key
 echo "OPENAI_API_KEY=sk-..." > .env
@@ -586,10 +618,12 @@ echo "OPENAI_API_KEY=sk-..." > .env
 **Problem**: `"FileNotFoundError: dataset file not found"`
 
 **Causes**:
+
 - `dataset_context.file_path` is incorrect
 - File doesn't exist at the specified path
 
 **Solution**:
+
 - Use absolute paths or paths relative to the project root
 - Verify the file exists:
   ```bash
@@ -601,10 +635,12 @@ echo "OPENAI_API_KEY=sk-..." > .env
 **Problem**: `"validation error"`
 
 **Causes**:
+
 - Missing required fields in request body
 - Incorrect data types
 
 **Solution**:
+
 - Check the request schema in the API docs at `/docs`
 - Ensure all required fields are present
 - Use the examples provided in this guide
@@ -612,22 +648,26 @@ echo "OPENAI_API_KEY=sk-..." > .env
 ### Debugging Tips
 
 1. **Check Server Logs**:
+
 ```bash
 # Watch for errors in real-time
 tail -f logs/agent.log
 ```
 
 2. **Enable Debug Mode** (in your client):
+
 ```python
 import logging
 logging.basicConfig(level=logging.DEBUG)
 ```
 
 3. **Use API Docs**:
+
 - Visit `http://127.0.0.1:8000/docs` to test endpoints interactively
 - Try requests directly in Swagger UI
 
 4. **Inspect Agent Output**:
+
 - Check `app/logs/` directory for detailed agent logs
 - Check `app/ai_output_imgs/` for generated visualizations
 
@@ -673,6 +713,7 @@ logging.basicConfig(level=logging.DEBUG)
 ## Support
 
 For issues or questions:
+
 1. Check this guide's Troubleshooting section
 2. Review logs in `app/logs/agent.log`
 3. Check FastAPI docs at `/docs` endpoint
