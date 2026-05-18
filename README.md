@@ -1,6 +1,6 @@
 # Personal Data Analysis Assistant
 
-> An AI-powered analysis assistant with a human-in-the-loop workflow — upload a dataset, interrogate it in plain English, approve an analysis plan, and receive a polished PowerPoint report.
+> An AI-powered analysis assistant with a human-in-the-loop workflow — upload a dataset, interrogate it in plain English, approve an analysis plan, and receive a PDF report.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.x-ff4b4b?style=flat-square)
